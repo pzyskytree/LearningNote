@@ -4,6 +4,6 @@ eg: Writing in Markdown *is* not hard.
 eg:  Writing in Markdown **is** not hard.
 3. _**bold and italic**_: *** ***
 eg: Writing in Markdown **_is_** not hard.
-4. ###Headers: # 
+###Headers: # 
 eg: #Markdown ##Markdown ##Markdown
 5. 
