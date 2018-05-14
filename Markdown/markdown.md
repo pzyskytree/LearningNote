@@ -59,13 +59,13 @@ Well, do I have [the website for you][another fun place]!
 
 * Tintin 
   * A reporter
- * Has poofy orange hair
- * Friends with the world's most awesome dog
+  * Has poofy orange hair
+  * Friends with the world's most awesome dog
 * Haddock
- * A sea captain
- * Has a fantastic beard
- * Loves whiskey
-   * Possibly also scotch?
+  * A sea captain
+  * Has a fantastic beard
+  * Loves whiskey
+    * Possibly also scotch?  
 13. Paragraph: softbreak: two space at the end of sentence or hard break: space line after one paragraph    
 Do I contradict myself?
 
