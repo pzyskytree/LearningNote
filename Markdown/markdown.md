@@ -10,8 +10,7 @@ eg: Writing in Markdown **_is_** not hard.
 ## Markdown 
 ### Markdown 
 
-5. Inline Link: [](url)
-
+5. Inline Link: **[]()**
 [Google it](www.google.com)
 
 Bold with Link
@@ -20,10 +19,9 @@ Bold with Link
 
 Header with link
 
-####The Latest News from [the BBC](www.bbc.com/news)
+#### The Latest News from [the BBC](www.bbc.com/news)
 
-6. Reference Link: [a][b] [b]: url
-
+6. Reference Link: **[a][b] [b]: url**
 Do you want to [see something fun][a fun place]?
 
 Well, do I have [the website for you][another fun place]!
@@ -32,11 +30,10 @@ Well, do I have [the website for you][another fun place]!
 
 [another fun place]: www.stumbleupon.com
 
-7. Images: ![](url)
+7. Images: **![](url)**
 ![A representation of Octdrey Catburn](http://octodex.github.com/images/octdrey-catburn.jpg)
 
-8. Reference image ![a][b] [b]: url
-
+8. Reference image **![a][b] [b]: url**
 ![The first father][First Father]
 
 ![The second first father][Second Father]
