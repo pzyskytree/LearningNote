@@ -56,6 +56,7 @@ Well, do I have [the website for you][another fun place]!
 11. Ordered List: 1. 2.
 
 12. Lists with more depth
+
 * Tintin
  * A reporter
  * Has poofy orange hair
@@ -65,7 +66,7 @@ Well, do I have [the website for you][another fun place]!
  * Has a fantastic beard
  * Loves whiskey
    * Possibly also scotch?
-13. Paragraph: softbreak: two space at the end of sentence or hard break: space line after one paragraph  
+13. Paragraph: softbreak: two space at the end of sentence or hard break: space line after one paragraph    
 Do I contradict myself?
 
 Very well then I contradict myself,
