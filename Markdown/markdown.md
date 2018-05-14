@@ -10,7 +10,7 @@ eg: Writing in Markdown **_is_** not hard.
 ## Markdown 
 ### Markdown 
 
-5. Inline Link: **[]()**
+5. Inline Link: **/[/]/(/)**
 [Google it](www.google.com)
 
 Bold with Link
