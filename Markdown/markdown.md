@@ -57,8 +57,8 @@ Well, do I have [the website for you][another fun place]!
 
 12. Lists with more depth
 
-* Tintin
- * A reporter
+* Tintin 
+  * A reporter
  * Has poofy orange hair
  * Friends with the world's most awesome dog
 * Haddock
