@@ -1,12 +1,12 @@
 ## Machine-Level Representation of Programs
 
-**_Historical Perspective_**
+### **_Historical Perspective_**
    * 8086 (1978, 29K transistors) 16-bit  
    * 8088 24-bit  
    * i386 (1985, 275K transistors) 32-bit, IA32  
    * Pentium 4E (2004, 125M transistors) 64-bit, x86-64 
 ___
-***Program Encoding***      
+### ***Program Encoding***      
 gcc : GCC compiler or cc in Linux:
   
 ```c
@@ -47,14 +47,14 @@ After link, inside the excutable file the address shifted to another range
 	 
 ___
 
-***Data Format***  
+### ***Data Format***  
 word: 16-bit, double-word: 32-bit, quad word: 64-bit  
 byte:b,  word: w, double-word: l  
 IA32 not support 64 bit in hardware  
 Floating point: float(4-bit): s, double(8-bit): l, long double(10/12-bit): t  
 ___
 
-***Access information***  
+### ***Access information***  
 Eight Register:  32-bit  
 * General Register
   ```c
