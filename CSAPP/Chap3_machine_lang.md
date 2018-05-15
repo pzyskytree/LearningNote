@@ -11,32 +11,33 @@ ___
   
 ```
 gcc -O1 -o hello hello.c // O1 level one optimization 
-// The higher optimization level leads to faster  the program, but also hard to understand the generated machine code
+// The higher optimization level leads to faster  the program, 
+//but also hard to understand the generated machine code
 ```
    1. C preprocessor expands source code with include file
    2. Compliler generate assembly-code version of source file hello.s
    3. Assembler converts assembly code into binary object-code hello.o
    4. Linker merge the hello.o and generate executable file hello  
-  **ISA**: (instruction Set Architecture): processor state, the format of instruction effect of   instruction on state.
-   **Virtual Address** large byte array
+  **ISA**: (instruction Set Architecture): processor state, the format of instruction effect of   instruction on state.  
+   **Virtual Address** large byte array.  
    Visible processor state for IA32 Machine code:
        * PC (programmer  counter) %eip 
        * Interger register file: 8 32-bit (date or address)
        * Condition code register: status information: if or while implementation
-       * Floating Point register
+       * Floating Point register  
 	```
 	gcc -O1 -S hello.c// Compile hello.c to hello.s assembly code
 	gcc -O1 -c hello.c // Compile and assemble to code to hello.o binary object file
-	```
-     Disassembler : Convert binary object file hello.o to assembly code  
+	```  
+        Disassembler : Convert binary object file hello.o to assembly code  
 	 ```
 	 objdump -d hello.o
-	 ```
+	 ```  
 	 IA32 instruction length from 1 to 15 bytes. 
-	 Unique starting point for each instruction.
+	 Unique starting point for each instruction.  
 	 ```
 	 gcc -O1 -o main hello.o main.c // Link hello.o with main.c
-	 ```
+	 ```  
 	 After link, inside the excutable file the address shifted to another range 
 	 
 ___
