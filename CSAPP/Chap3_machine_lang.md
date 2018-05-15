@@ -1,10 +1,10 @@
 ## Machine-Level Representation of Programs
 
 **_Historical Perspective_**  
-    *  8086 (1978, 29K transistors) 16-bit
-	* 8088 24-bit
-	* i386 (1985, 275K transistors) 32-bit, IA32
-	* Pentium 4E (2004, 125M transistors) 64-bit, x86-64 
+    *  8086 (1978, 29K transistors) 16-bit  
+    * 8088 24-bit
+    * i386 (1985, 275K transistors) 32-bit, IA32  
+    * Pentium 4E (2004, 125M transistors) 64-bit, x86-64 
 ___
 ***Program Encoding***      
   gcc : GCC compiler or cc in Linux:
@@ -60,63 +60,64 @@ General Register
     6. %edi(32-bit),  %di(low 16-bit)  
 ```
  Special Register  
- ```
+ ```c
     1. %esp(32-bit),  %sp(low 16-bit) //Stack Pointer
     2. %ebp(32-bit),  %bp(low 16-bit) //Frame Pointer
 ```
   1. Oprand Specifier  
      1. Immediate: constant value  
-	```
+	```c
 	   $-123, $0x1F// Format
 	   -123, 0x1F//Value
 	```
      2. Register: content of one of the register  
-	```
+	```c
 	%eax//Register Format
 	R[%eax] // Value inside the register, Value 
 	//Viewing set of register as an array R indexed by identifier
 	```
-     3. Memory: Effective Address 
-        ```
-	  //Absolute
-	  Imm//Format 
-	  M[Imm]//Value
-	  //Indirect
-	 (Ea)//Format
-	 M[R[Ea]]//Value
-	 //Base + displacement
-	 Imm(Ea)//Format
-	 M[Imm+R[Ea]]//Value
+     3. Memory: Effective Address  
+     
+        ```c
+	    //Absolute
+	    Imm//Format 
+	    M[Imm]//Value
+	    //Indirect
+	    (Ea)//Format
+	    M[R[Ea]]//Value
+	    //Base + displacement
+	    Imm(Ea)//Format
+	    M[Imm+R[Ea]]//Value
 	  ```
   2.  Data Movement Instruction
      1. mov  // Copy from source to destination
 	 Source Immediate number stored in Mmeory or Register. Destination: Location, Register or Memory Address
 	 Cannot be two Memory Addresses at the same time.  
-	   ```
+	   ```c
 	   movb S, D // Move byte S to D
 	   movw S, D// Move word S to D
 	   movl S, D // Move double word S to D
 	   ```
      2. movs // Move with sign extension  
-	   ```
+	   ```c
 	   movsbw  S, D// Move byte S to word D
 	   movsbl S, D//Move byte S to double word D
 	   movswl S, D// Move word S to double word D
 	   ```
      3. movz// Move with zero extension  
-	  ```
+	  ```c
 	   movzbw  S, D// Move byte S to word D
 	   movzbl S, D//Move byte S to double word D
 	   movzwl S, D// Move word S to double word D
 	   ```
      4. pushl S // Stack grows downward such that the top element has the lowest memory  address  
-	   ```
+	   ```c
 	   R[%esp] <- R[%esp] - 4
 	   M[R[%esp]] <- S
 	   pushl %ebp == subl $4, %esp; movl %ebp, (%esp)
 	   ```
      5. popl D  
-	   ```
+	   ```c
 	   D <- M[R[%esp]]
 	   R[%esp] <- R[%esp] + 4
 	   pop %eax == movl (%esp), %eax; addl $4, %esp
