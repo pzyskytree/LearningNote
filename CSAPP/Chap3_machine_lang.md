@@ -24,17 +24,20 @@ gcc -O1 -o hello hello.c // O1 level one optimization
        * PC (programmer  counter) %eip 
        * Interger register file: 8 32-bit (date or address)
        * Condition code register: status information: if or while implementation
-       * Floating Point register  
+       * Floating Point register
+       
 	```
 	   gcc -O1 -S hello.c// Compile hello.c to hello.s assembly code  
 	   gcc -O1 -c hello.c // Compile and assemble to code to hello.o binary object file
-	```  
+	```
         Disassembler : Convert binary object file hello.o to assembly code  
+	
 	 ```
 	    objdump -d hello.o
 	 ```  
 	 IA32 instruction length from 1 to 15 bytes. 
 	 Unique starting point for each instruction.  
+	 
 	 ```
 	    gcc -O1 -o main hello.o main.c // Link hello.o with main.c
 	 ```  
