@@ -68,7 +68,7 @@ sudo apt-get install git
   git diff --cached // Stage vs Branch
   git diff HEAD -- // Work Directory vs Branch
   ```
-  5. *Repeal Modification*
+  5. *Repeal Modification*  
      Retrovate the modification in work directory  
 	   ```
 	   git checkout -- <file>// Copy the file from stage to work directory
@@ -78,7 +78,7 @@ sudo apt-get install git
       ```
 	  git reset HEAD <file>  
 	  ```
-  6. _Delete File_
+  6. _Delete File_  
    ```
    git rm <file>
    ```
