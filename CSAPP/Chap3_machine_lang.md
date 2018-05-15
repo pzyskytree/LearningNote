@@ -26,17 +26,17 @@ gcc -O1 -o hello hello.c // O1 level one optimization
        * Condition code register: status information: if or while implementation
        * Floating Point register  
 	```
-	gcc -O1 -S hello.c// Compile hello.c to hello.s assembly code
-	gcc -O1 -c hello.c // Compile and assemble to code to hello.o binary object file
+	   gcc -O1 -S hello.c// Compile hello.c to hello.s assembly code  
+	   gcc -O1 -c hello.c // Compile and assemble to code to hello.o binary object file
 	```  
         Disassembler : Convert binary object file hello.o to assembly code  
 	 ```
-	 objdump -d hello.o
+	    objdump -d hello.o
 	 ```  
 	 IA32 instruction length from 1 to 15 bytes. 
 	 Unique starting point for each instruction.  
 	 ```
-	 gcc -O1 -o main hello.o main.c // Link hello.o with main.c
+	    gcc -O1 -o main hello.o main.c // Link hello.o with main.c
 	 ```  
 	 After link, inside the excutable file the address shifted to another range 
 	 
