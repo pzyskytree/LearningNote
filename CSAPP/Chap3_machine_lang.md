@@ -1,6 +1,6 @@
 ## Machine-Level Representation of Programs
 
- **_Historical Perspective_**
+**_Historical Perspective_**
     *  8086 (1978, 29K transistors) 16-bit
 	* 8088 24-bit
 	* i386 (1985, 275K transistors) 32-bit, IA32
@@ -65,28 +65,28 @@ General Register:
 ```
   1. Oprand Specifier
      1. Immediate: constant value
-	   ```
+	```
 	   $-123, $0x1F// Format
 	   -123, 0x1F//Value
-	   ```
-    2. Register: content of one of the register
+	```
+     2. Register: content of one of the register
 	```
 	%eax//Register Format
 	R[%eax] // Value inside the register, Value 
 	//Viewing set of register as an array R indexed by identifier
 	```
-	3. Memory: Effective Address 
-  ```
-  //Absolute
-  Imm//Format 
-  M[Imm]//Value
-  //Indirect
- (Ea)//Format
- M[R[Ea]]//Value
- //Base + displacement
- Imm(Ea)//Format
- M[Imm+R[Ea]]//Value
-  ```
+     3. Memory: Effective Address 
+        ```
+	  //Absolute
+	  Imm//Format 
+	  M[Imm]//Value
+	  //Indirect
+	 (Ea)//Format
+	 M[R[Ea]]//Value
+	 //Base + displacement
+	 Imm(Ea)//Format
+	 M[Imm+R[Ea]]//Value
+	  ```
   2.  Data Movement Instruction
      1. mov  // Copy from source to destination
 	 Source Immediate number stored in Mmeory or Register. Destination: Location, Register or Memory Address
@@ -96,31 +96,31 @@ General Register:
 	   movw S, D// Move word S to D
 	   movl S, D // Move double word S to D
 	   ```
-   2. movs // Move with sign extension
+     2. movs // Move with sign extension
 	   ```
 	   movsbw  S, D// Move byte S to word D
 	   movsbl S, D//Move byte S to double word D
 	   movswl S, D// Move word S to double word D
 	   ```
-   3. movz// Move with zero extension
+     3. movz// Move with zero extension
 	    ```
 	   movzbw  S, D// Move byte S to word D
 	   movzbl S, D//Move byte S to double word D
 	   movzwl S, D// Move word S to double word D
 	   ```
-   4. pushl S // Stack grows downward such that the top element has the lowest memory  address
+     4. pushl S // Stack grows downward such that the top element has the lowest memory  address
 	   ```
 	   R[%esp] <- R[%esp] - 4
 	   M[R[%esp]] <- S
 	   pushl %ebp == subl $4, %esp; movl %ebp, (%esp)
 	   ```
-   5. popl D
+     5. popl D
 	   ```
 	   D <- M[R[%esp]]
 	   R[%esp] <- R[%esp] + 4
 	   pop %eax == movl (%esp), %eax; addl $4, %esp
 	   ```  
-   Pointer in C is simply address in assmebly code. Deference pointer is using register indirect reference. 
+      Pointer in C is simply address in assmebly code. Deference pointer is using register indirect reference. 
    Local variable store in register not in memory since regiester is faster.
   
 
