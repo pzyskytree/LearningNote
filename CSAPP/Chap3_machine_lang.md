@@ -1,10 +1,10 @@
 ## Machine-Level Representation of Programs
 
-**_Historical Perspective_**  
-    *  8086 (1978, 29K transistors) 16-bit  
-    * 8088 24-bit
-    * i386 (1985, 275K transistors) 32-bit, IA32  
-    * Pentium 4E (2004, 125M transistors) 64-bit, x86-64 
+**_Historical Perspective_**
+   * 8086 (1978, 29K transistors) 16-bit  
+   * 8088 24-bit  
+   * i386 (1985, 275K transistors) 32-bit, IA32  
+   * Pentium 4E (2004, 125M transistors) 64-bit, x86-64 
 ___
 ***Program Encoding***      
   gcc : GCC compiler or cc in Linux:
