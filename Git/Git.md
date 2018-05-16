@@ -129,11 +129,31 @@ Linux: [make apt-get work](https://askubuntu.com/questions/15433/unable-to-lock-
         // Not move the pointer but create a new commit node to merge
         ```
    6. **Bug Branch**
-   	  ```c
-      git stash//store the current work site
-      ```
-    
-       
+   	   ```c
+       git stash// store the current work site.
+       git stash list// check all the work site
+       ```
+       Recover the work site:
+       ```c
+       git stash apply id//recover the work site but not delete it from stash
+       git stash drop id//delete the work site from stash
+       ```
+       ```c
+       git stash pop//recover the most recent stash
+       ```
+    7. **Cooperation**
+        ```c
+        git remote
+        git remote -v // Check all the remote connect
+        ```
+      
+        ```c
+        git push origin master
+        git push origin dev//Create dev branch in github
+        ```
+       	```c
+        git branch --set-upstream-to=origin/dev dev//Correlate local branch with github branch
+        ```
 
 
 
