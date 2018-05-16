@@ -128,7 +128,10 @@ Linux: [make apt-get work](https://askubuntu.com/questions/15433/unable-to-lock-
         git merge --no-ff -m "merge with no-ff" dev //no fast-forward 
         // Not move the pointer but create a new commit node to merge
         ```
-   6
+   6. **Bug Branch**
+   	  ```c
+      git stash//store the current work site
+      ```
     
        
 
