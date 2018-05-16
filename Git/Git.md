@@ -82,4 +82,32 @@ Linux: [make apt-get work](https://askubuntu.com/questions/15433/unable-to-lock-
        ```c
        git rm <file>
        ```
-	  
+ 4. **GitHub**  
+    1. Create SSH key
+        ```c
+        shh-keygen -t rsa -C "youremail@example.com	//Generate id_rsa id_rsa.pub
+        ```
+    2. Add tele-repository
+       ```c
+       git remote add origin youreamil@example.com/abc.gi //Correlate github with your local repository
+       ```
+    3. Push local repository to github
+        ```c
+			
+        ```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
