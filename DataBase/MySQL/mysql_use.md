@@ -79,7 +79,7 @@
         select <columns> from <table_name> where <target> not in (v1, v2, v3);//Pick up the 
         //records not satisfying filter condition
         ```
-        Use **Wildcards**: Select unknown value
+        Use **Wildcards**: Select unknown value and Match the whole string
         ```c
         LIKE //A Predicate to use wildcards to match not value matching
         //% wildcard represents any character in any amount but % will not match NULL
@@ -91,7 +91,7 @@
         //started by "my" in length 3;
         ```
         ***Tips***: Do not put the wildcard filter at the beginning. It will make the searching process slow.  
-        **Regular Expression**        
+        **Regular Expression**: Match the substring        
         ```c
         REGEXP//Regular Expression
         //Basic Character
@@ -119,7 +119,13 @@
         select <columns> from <table_name> where <col1> regexp "\\([0-9] sticks?\\)";//sticks or stick
         select <columns> from <table_name> where <col1> regexp "[0-9]{4}";//4 numbers
         
-        //Locator
+        //Locator 
+        ^ head of the file, $ tail of the file
+        select <columns> from <table_name> where <col1> regexp "^[0-9\\.]";//Start with number
+        select <columns> from <table_name> where <col1> regexp "[0-9\\.]$";//End with number
+        
+        //Check expression
+        select "String" regexp "[0-9]"//Check if "String" contains number, return 0(not matching) or 1(matching)
         ```
        
     
