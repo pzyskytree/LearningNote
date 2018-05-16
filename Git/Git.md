@@ -89,14 +89,48 @@ Linux: [make apt-get work](https://askubuntu.com/questions/15433/unable-to-lock-
         ```
     2. Add tele-repository
        ```c
-       git remote add origin youreamil@example.com/abc.gi //Correlate github with your local repository
+       git remote add origin youremail@example.com/abc.gi //Correlate github with your local repository
        ```
     3. Push local repository to github
         ```c
-			
+		git push origin master
         ```
-
-
+    4. Clone from github
+    	```c
+        git clone youremail@example.com/abc.git 
+        ```
+  5. **Branch Management**
+  	 1. Create and Merge branch
+  	 	HEAD points to the current branch
+        ```c
+        git branch// List all the branches
+        ```
+  	 	```c
+        git checkout -b <new_branch> //Create and move to the new branch
+        ```
+        ```c
+        git branch <new_branch> // Create new branch
+        git checkout branch // Move to the new branch
+        ```
+        ```c
+        git merge dev //Merge to the current branch in Fast-Forward model
+        ```
+		```c
+        git branch -d <branch>//Delete an existing branch
+        ```
+     2. Solve conflict
+     	Can not merge directly, solve the conflict and go into a new node.
+        ```c
+        git log --graph//Show commit graph
+        ```
+     3. Branch Management Strategy
+        ```c
+        git merge --no-ff -m "merge with no-ff" dev //no fast-forward 
+        // Not move the pointer but create a new commit node to merge
+        ```
+   6
+    
+       
 
 
 
