@@ -50,7 +50,7 @@
       ```
       >ORDER BY clause must be ***after*** FROM clause and LIMIT clause must ***after*** ORDER BY clause;
   6. **Filter Data**  
-  	WHERE filter condition ***after*** FROM ***before*** ORDER BY
+  	***WHERE*** filter condition ***after*** FROM ***before*** ORDER BY
     	```c
         select <columns> from <table_name> where <filter condition>;
         //Operator
@@ -127,6 +127,93 @@
         //Check expression
         select "String" regexp "[0-9]"//Check if "String" contains number, return 0(not matching) or 1(matching)
         ```
-       
-    
-    
+   7. **Calculated Field**  
+   		Calculated filed is not inside database, it is created when select statement is executed.    
+        Concatenate:  
+        ```c
+        Concat()
+        select Concat(col1, '(', col2, ')') from <table_name> where <fc>//Select multiple columns and 
+        //concatenate them together
+        
+        RTrim()
+        select Concat(RTrim(col1), "(", RTrim(col2), ")") from <table_name> where <fc>//Remove the space 
+        //at the end of each value.
+        ```  
+        Alias: Illegal to use the same name as one of the columns.
+        ```c
+        AS
+        select Concat(RTrim(col1), "(", RTrim(col2), ")") as new_col from <table_name> where <fc>//Give an 
+        //alias new_col to the new concatenated column.
+        //Arithmetic Calculation: + - * /
+        select col1, col2, col1 + col2 as sum_col from <table_name> where <fc>
+        ```
+   8. **Function**  
+   		* Text Function
+          ```c
+          select col1, Function(col1) as new_col1 from <table_name>
+          Length(str)//Length of String str
+          Locate(substr, str)//Return 1 if str contain substr, else return 0
+          Upper(str) //Transfer all the letter in the string to be upper case
+          Lower(str) //Transfer all the letter in the string to be lower case
+          Left(str, n)//Return n left characters of str
+          Right(str, n)//Return n right characters of str
+          Rtrim()//Remove the space at right;
+          Ltrim()//Remove the space at left;
+          Substring(str, i, len)//i start index from 1 to length(str), len the length of substring
+          Soundex(str)//Sound value
+          ```
+         * Date and Time Function  
+           ```c
+           Format of date: yyyy-mm-dd
+           AddDate(date, n)//Add n days to date
+           AddTime(time, n)//Add n seconds to time
+           CurDate();//Return current date
+           CurTime();//Return current time
+           Now() = CurDate() + CurTime()
+           Date(time)//Return date part of time
+           DateDiff(d1, d2)//Return d1 - d2
+           Year(time)//Return year part of the time
+           Month(time)//Return month part of the time
+           Day(time)//Return the day part of time
+           DayOfWeek(date)//Return the week day of date
+           Time(time)//Return the time part: hh:mm:ss
+           Hour(time)//Return hour part of the time
+           Minute(time)//Return minute part of the time
+           Second(time)//Return the second part of the time
+           select <colmns> from <table_name> where date(date_col) between "yyyy-mm-dd1" and "yyyy-mm-dd2"
+           //Select the record with date_col between two dates
+           select <colmns> from <table_name> where year(date_col) = yyyy and month(date_col) = mm;
+           //Select a specific month;
+           ```
+          * Value Function
+          	```c
+          	Abs(x)//Absolute value
+          	Cos(x)//Cosine value. if x = pi cos(x) = -1
+            Sin(x)//Since value. if x = pi/2 sin(x) = 1
+            Tan(x)
+            Pi()//Return pi
+            Sqrt(x)//Return square root of x. eg. x = 4 return 2
+            Exp(x)//Return e ^ x
+            Mod(a, b)// Return a % b
+            Rand()//Return a random number
+          	```
+           * Aggregate Function: Return a statistical value  
+           	 ```c
+             Avg(col)//Return average value of one specific column. It will ignore NULL value;
+             select avg(col1) as avg_col from <table_name> where <fc_name>;
+             Count(col)//Count the number of return rows, ignoring NULL
+             Count(*)//Count the number of rows including NULL
+             select count(col1) as count_col from <table_name> where <fc_name>;
+             Max(col)//Return the max value of one specific column among all the selected record, ignoring NULL
+             select max(col) as max_value from <table_name> where <fc_name>;
+             //Max can return the max value of date and string as well
+             Min(col)//Return the min value of one specific column among all the selected record, ignoring NULL
+             select min(col) as min_value from <table_name> where <fc_name>;
+             Sum(col)//Return total sum of the one specific column among all select records, ignoring null
+             select sum(col) as total_sum from <table_name> where <fc_name>;
+             Distinct//Just consider distinct value, the default is ALL value
+             select avg(distinct col) as max_value from <table_name> where <fc_name>;
+             Distinct can be used to count(distinct col) but not count(distinct *)
+             ```
+        
+        
