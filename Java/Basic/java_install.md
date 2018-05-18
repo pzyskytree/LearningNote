@@ -28,4 +28,8 @@
     source /etc/environment //Reload it
     echo $JAVA_HOME //Check if java is installed successfully
     ```
-    
+4. Compile and Run Java
+	```c
+    javac filename.java //Compile java file to a .class file
+    java classname.class //Run .class file.
+    ```
