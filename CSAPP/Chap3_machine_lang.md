@@ -97,6 +97,16 @@ Eight Register:  32-bit
 	    //Base + displacement
 	    Imm(Ea)//Format
 	    M[Imm+R[Ea]]//Value
+        (Ea,Eb)//Format
+        M[R[Ea] + R[Eb]]//Value
+        Imm(Ea,Eb)//Format
+        M[Imm + R[Ea] + R[Eb]]//Value
+        (, Eb, s)//Format
+        M[R[Eb] * s//Value
+        (Ea,Eb,s)//Format
+        M[R[Ea] + R[Eb] * s]//Value
+        Imm(Ea,Eb,s)//Format
+        M[Imm + R[Ea] + R[Eb] * s]//Value
 	    ```
   2.  Data Movement Instruction
   
@@ -142,7 +152,54 @@ Eight Register:  32-bit
            ```  
        Pointer in C is simply address in assmebly code. Deference pointer is using register indirect reference. 
        Local variable store in register not in memory since regiester is faster.
+   3. Arithmetic and Logical Instruction
+   		1. Load Effective Address  
+            ```c
+            leal S, D// D <- &S Variant of movl copy the address of S to D, Destination D must be a register.
+            ```
+        2. Unary Operation: Single Oprand
+        	```c
+            //D can be memory location or register
+            inc D//D <- D + 1 Increment
+            dec D//D <- D - 1 Decrement
+            neg D//D <- -D Negate
+            not D//D <- ~D Complement
+            ```
+        3. Binary Operation: 
+        	```c
+            // S can be value, memory and register, D can be memory or register but both of them cannot be
+            //memory simultaneously
+            //Arithmetic
+            add S, D// D <- D + S Add
+            sub S, D// D <- D - S Subtract
+            imul S, D//D <- D * S Multiplication
+            //Logic
+            xor S, D//D <- D ^ S Exclusive or
+            or S, D//D <- D | S Or
+            and S, D//D <- D & S And
+            ```
+        4. Shift Operation:
+        	```c
+            //k immediate value or in %cl, D in memory or register 
+            sal k, D// D <- D << k(Arithmetic)
+            shl k, D//D <- D << k
+            sar k, D//D <- D >> k(Arithmetic shift padding with signed bit)
+            shr k, D//D <- D >>> k(Logical shift padding with zero.
+            ```
+        5. Special Arithmetic Operation:
+        	```c
+            imull S//R[%edx]:R[%eax] <- S * R[%eax] Signed full multiply
+            mull S//R[%edx]:R[%eax] <- S * R[%eax] Unsigned full multiply
+            
+            cltd //R[%edx]:R[%eax] <- signExtend(R[%exa])
+            
+            idivl S //R[%edx] <- R[%edx]:R[%eax] mod S  Signed Division
+                    //R[%eax] <- R[%edx]:R[%eax] / S
+            divl S  //R[%edx] <- R[%edx]:R[%eax] mod S  Unsigned Division
+                    //R[%eax] <- R[%edx]:R[%eax] / S
+            ```
   
+
 
 
 
