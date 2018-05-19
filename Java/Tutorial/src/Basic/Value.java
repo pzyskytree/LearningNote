@@ -26,8 +26,5 @@ public class Value {
 		char singleQuote = '\'';
 		char bachSlash = '\\';
 		
-		
-				
-		
 	}
 }

@@ -31,6 +31,25 @@ public class Variable {
 		boolean bo1 = true;
 		boolean bo2 = false;
 		
+		//Name Rule:
+		//Letters: Number[0-9], English letter[A-Za-z], _, $
+		//First Letter: Letter, _, $
+		//Cannot be key words, but can contain key words.
+		
+		//Working Field:
+		//1.Attribute or field: Entire Class
+		//2.Parameter: Inside the method 
+		//3.Local Variable: Start from its declaration position to the end of block
+		//If multiple variables with the same name are accessible in this field, pick the closest one.
+		//就近原则。
+		
+		final int j = 11;
+		final int i;
+		//System.out.println(i); Compile Error
+		i = 10;
+		//i = 11;  
+		//j = 10; Compile Error. Since if a variable is decorated by final, it can only be assigned once.
+		
 		
 	} 
 }
