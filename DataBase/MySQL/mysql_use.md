@@ -170,7 +170,7 @@
            CurDate();//Return current date
            CurTime();//Return current time
            Now() = CurDate() + CurTime()
-           Date(time)//Return date part of time
+           Date(time)//Return date part of time: yyyy-mm-dd
            DateDiff(d1, d2)//Return d1 - d2
            Year(time)//Return year part of the time
            Month(time)//Return month part of the time
@@ -187,14 +187,15 @@
            ```
           * Value Function
           	```c
-          	Abs(x)//Absolute value
           	Cos(x)//Cosine value. if x = pi cos(x) = -1
             Sin(x)//Since value. if x = pi/2 sin(x) = 1
             Tan(x)
-            Pi()//Return pi
+            Abs(x)//Absolute value
             Sqrt(x)//Return square root of x. eg. x = 4 return 2
             Exp(x)//Return e ^ x
+            Log(x)//Return ln(x)
             Mod(a, b)// Return a % b
+            Pi()//Return pi
             Rand()//Return a random number
           	```
            * Aggregate Function: Return a statistical value  
@@ -212,8 +213,47 @@
              Sum(col)//Return total sum of the one specific column among all select records, ignoring null
              select sum(col) as total_sum from <table_name> where <fc_name>;
              Distinct//Just consider distinct value, the default is ALL value
-             select avg(distinct col) as max_value from <table_name> where <fc_name>;
+             select avg(distinct col) as avg_value from <table_name> where <fc_name>;
              Distinct can be used to count(distinct col) but not count(distinct *)
              ```
-        
-        
+   9. **Group Data**
+		* Create group: **Group by**
+		   *  Group by can contain any number of columns. It can make embeded group. The group is built based on
+		   all the appointed columns not the single one.
+		   *  All the columns in the select except for the aggregate function should also appear in group by clause.
+		   *  All the Null value will be assigned to the same group.
+		   *  Group by must appear after where but before order by
+		   *  Group by cannot have aggreate function.
+			```c
+            select col1, count(col2) from table where fc group by col1;//Group the data from the table based on
+            //different value of col1
+            ```
+         * Filter Group: **Having**: including some groups and excluding other groups 
+         	* The target of WHERE is row record, while HAVING is to deal with each group.
+         	* Actually all the conditin in where clause can also in HAVING
+         	* Where filters rows before grouping, having filters groups after grouping
+         	```c
+             select col1, count(col2) from table where fc1 group by col1 having fc2;//Group the data from the
+             //table based on different value of col1 and rule out all the groups not satisfying filter 
+             //condition2
+            ```
+         * Difference between ORDER BY and GROUP BY:
+         	* order by's output are ordered, group by's output are group rows but not in order.
+         * Clause order	 
+        	**select -> from -> where -> group by -> having -> order by -> limit**
+     10. **Subquery**  
+     	 * Use subquery as filter:  
+           ```c
+           select col1, col2 from table1 where col1 in (select col1 from table2 where fc1);//Select record 
+           //based on the result from the subquery. The order is from inside query to outside query.
+           ```
+           In most cases the return column of inside query is only one column.   
+           Keep the number of column in WHERE the same as the number of column in internal query.
+         * Use subquery as calculated field:
+         	```c
+            select col1, col2, (select col3 from table1 whre fc2) as new_col from table1 where fc1;//The result
+            //of the subquery as a return field. For each row of the result, the subquery will execute one time.
+            //When one column's name of two tables are the same, we should use the full name rather than 
+            //partial name.
+            ```
+
