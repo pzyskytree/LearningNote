@@ -188,17 +188,55 @@ Eight Register:  32-bit
             ```
         5. Special Arithmetic Operation:
         	```c
-            imull S//R[%edx]:R[%eax] <- S * R[%eax] Signed full multiply
-            mull S//R[%edx]:R[%eax] <- S * R[%eax] Unsigned full multiply
+            imull S  //R[%edx]:R[%eax] <- S * R[%eax] Signed full multiply
+            mull S   //R[%edx]:R[%eax] <- S * R[%eax] Unsigned full multiply
             
-            cltd //R[%edx]:R[%eax] <- signExtend(R[%exa])
+            cltd    //R[%edx]:R[%eax] <- signExtend(R[%exa])
             
             idivl S //R[%edx] <- R[%edx]:R[%eax] mod S  Signed Division
                     //R[%eax] <- R[%edx]:R[%eax] / S
             divl S  //R[%edx] <- R[%edx]:R[%eax] mod S  Unsigned Division
                     //R[%eax] <- R[%edx]:R[%eax] / S
             ```
-  
+   4. Control Flow
+   	  1. Condition Codes: Single bit
+   	  	 * CF: Carry Flag: Most recent operation generate a carry out of the most significant bit. Detect overflow for unsigned operations.
+   	  	 * ZF: Zero Flag: The most recent operation yielded zero.
+   	  	 * SF: Signed Flag: The most recent operation yield a negative value.
+   	  	 * OF: Overflow Flag: The most recent operation cause a two's complement overflow.
+  	  2. Compare instruction
+          ```c
+          cmp(bwl) S2, S1 //Based on S1 - S2 to set ZF
+          test(bwl) S2, S1 //Based on S1 & S2 to set the condition codes.
+          ```
+      3. Accessing Condition Codes:
+      	* Set a byte to be zero or one based on condition code
+          ```c
+          //D is a byte register like al ah or a byte of memory
+          sete/z D   //D <- ZF                Equal/Zero
+          setne/nz D //D <- ~ZF               Not Equal/Not zero
+		  
+          sets D     // D <- SF               Negative
+          setns D    // D <- ~SF              Nonnegative
+          
+          setg/nle D // D <- ~(SF ^ OF) & ~ZF Greater           Signed >
+          setge/nl D // D <- ~(SF ^ OF)       Greater or equal  Signed >=
+          setl/nge D // D <- SF ^ OF          Less			    Signed <
+          setle/ng D // D <- (SF ^ OF) | ZF   Less or equal     Signed <= 
+          
+          seta/nbe D // D <- ~CF & ~ZF        Above             Unsigned >
+          setae/nb D // D <- ~CF              Above or equal    Unsigned >=
+          setb/nae D // D <- CF               Below             Unsigned <
+          setbe/na D // D <- CF | ZF          Below or equal    Unsigned <=
+          
+          //compare a < b, a in %eax b in %edx
+          cmp %edx, %eax //Compare a:b
+          setl %al  //Set %al to be 0 or 1 based on result.
+          movzbl %al, %eax
+          ```
+      4. Jump Instruction:
+      	* 
+          
 
 
 
