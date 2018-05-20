@@ -195,7 +195,8 @@
     drwxr-xr-x 2 pan pan 4096 May 12 22:36 Desktop
     drwxr-xr-x 2 pan pan 4096 May 12 22:36 Documents
     drwxr-xr-x 3 pan pan 4096 May 19 16:43 Downloads
-    //d: File type, d: directory. rwx: Permission. 2,3:link counter. pan: user. pan: //group. 4096: size. May 12 : Modification time. C : Name
+    //d: File type, d: directory. rwx: Permission. 2,3:link counter. pan: user. pan: group. 
+    //4096: size. May 12 : Modification time. C : Name
     rwx    rwx    rwx
     user  group  others
     R://Readable: 
