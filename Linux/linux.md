@@ -204,10 +204,12 @@
       //Directory: Contents of the directory can be listeds, you can use ls
     W://Writable
       //Regular File: Writable, you can midify it with vi, gedit
-      //Directory: You can add or delete files or modify the name of the file inside the   //directory even though you don't have the right to write the file.
+      //Directory: You can add or delete files or modify the name of the file inside the  
+      //directory even though you don't have the right to write the file.
     X://Executable
       //Regular File: Allow user to execute the file like a program like (shell script)
-      //Directory: Allow user to use it as working directory, you can use cd(Change       //Directory)
+      //Directory: Allow user to use it as working directory, you can use cd(Change       
+      //Directory)
     ```
 
     Change Permission:
