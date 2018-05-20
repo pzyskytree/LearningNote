@@ -63,7 +63,7 @@
      = equal, <> not equal, != not equal, < less than, <= less than or equal, > greater than >= greater than or equal, BETWEEN n AND m: n <= values <= m, IS (NOT) NULL: check if the value is null or not
      ```
 
-     ​     Filter Combination:  
+     Filter Combination:  
 
      ```c  
      Logic Operator:  //AND Satisfy all the filter conditions  select <columns> from <table_name> where <filter condition1> and <filter condition2>;
@@ -80,7 +80,7 @@
      //records not satisfying filter condition
      ```
 
-      Use **Wildcards**:   Select unknown value and Match the whole string
+     Use **Wildcards**:   Select unknown value and Match the whole string
      ```c
      LIKE //A Predicate to use wildcards to match not value matching
      //% wildcard represents any character in any amount but % will not match NULL
@@ -92,7 +92,7 @@
      ```
 
         ***Tips***: Do not put the wildcard filter at the beginning. It will make the searching process slow.  
-        **Regular Expression**: Match the substring        
+     **Regular Expression**: Match the substring        
      ```c
         REGEXP//Regular Expression
         //Basic Character
@@ -165,7 +165,7 @@
           Substring(str, i, len)//i start index from 1 to length(str), len the length of substring
           Soundex(str)//Sound value
           ```
-         * Date and Time Function  
+       * Date and Time Function  
            ```c
            Format of date: yyyy-mm-dd
            AddDate(date, n)//Add n days to date
@@ -188,7 +188,7 @@
            select <colmns> from <table_name> where year(date_col) = yyyy and month(date_col) = mm;
            //Select a specific month;
            ```
-          * Value Function
+        * Value Function
              ```c
              Cos(x)//Cosine value. if x = pi cos(x) = -1
              Sin(x)//Since value. if x = pi/2 sin(x) = 1
@@ -241,19 +241,19 @@
                //different value of col1
               ```
            
-         * Filter Group: **Having**: including some groups and excluding other groups 
+       * Filter Group: **Having**: including some groups and excluding other groups 
             * The target of WHERE is row record, while HAVING is to deal with each group.
-              * Actually all the conditin in where clause can also in HAVING
-              * Where filters rows before grouping, having filters groups after grouping
+            * Actually all the conditin in where clause can also in HAVING
+            * Where filters rows before grouping, having filters groups after grouping
               ```c
                select col1, count(col2) from table where fc1 group by col1 having fc2;//Group the data from the
                //table based on different value of col1 and rule out all the groups not satisfying filter 
                //condition2
               ```
-         * Difference between ORDER BY and GROUP BY:
-            * order by's output are ordered, group by's output are group rows but not in order.
-            	 Clause order	 
-            	**select -> from -> where -> group by -> having -> order by -> limit**
+       * Difference between ORDER BY and GROUP BY:
+          * order by's output are ordered, group by's output are group rows but not in order.
+            Clause order	 
+            **select -> from -> where -> group by -> having -> order by -> limit**
 
      10. **Subquery**  
         * Use subquery as filter:  
