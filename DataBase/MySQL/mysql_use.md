@@ -1,16 +1,18 @@
 ### Using MySQL
 
 1. **Connect MySQL**
- 	```c
+   ```c
     mysql -u root -p
     mysql -u root -p <database_name> < <file_name>.sql
-    ```
+   ```
+
 2. **Use Database**
     ```c
     use <database name>;
     ```
+
 3. **List Database and Table**
-	```c
+  ```c
     show databases;//Display all the databases
     show tables; //List all the tables in the database
     show columns from <table name>;//Display all the columns in one table
@@ -21,9 +23,10 @@
     show create database <db_name>;//Display the command to create a database;
     show create table <table_name>;//Display the command to create a table;
     help show//Show all the command about show
-    ```
+  ```
+
  4. **Select data**
- 	```c
+    ```c
     select <column_name> from <table_name>; //Select a single column value of 
     //all record from table without order.
     select col1,col2,col3 from <table_name>;//Select multiple columns;
@@ -36,10 +39,11 @@
     select <columns> from <table_name> limit n offset m;
     select <table_name>.<column_name> from <database_name>.<table_name>;//Full name;
     ```
+
   5. **Sort**  
-  	Clause: Select, From etc
+     Clause: Select, From etc
       ```c
-	  select <columns> from <table_name> order by <col1>(asc);//Sort the records based on 
+       select <columns> from <table_name> order by <col1>(asc);//Sort the records based on 
       //col1's value,col1 can not belong to <columns>
       select <columns> from <table_name> order by <col1>, <col2>;//Sort the records firstly 
       //based on col1's value if col1 is the same use col2.
@@ -49,50 +53,47 @@
       //add desc after each of them
       ```
       >ORDER BY clause must be ***after*** FROM clause and LIMIT clause must ***after*** ORDER BY clause;
+
   6. **Filter Data**  
-  	***WHERE*** filter condition ***after*** FROM ***before*** ORDER BY
-    	```c
-        select <columns> from <table_name> where <filter condition>;
-        //Operator
-        = equal, <> not equal, != not equal, < less than, <= less than or equal, > greater than
-        >= greater than or equal, BETWEEN n AND m: n <= values <= m, IS (NOT) NULL: check if 
-        the value is null or not
-    	```
-        Filter Combination:
-        ```c
-        Logic Operator:
-        //AND Satisfy all the filter conditions
-        select <columns> from <table_name> where <filter condition1> and <filter condition2>;
-        
-        //OR Satisfy only one of the condition
-        select <columns> from <table_name> where <filter condition1> or <filter condition2>;
-        
-        //And has a higher priority than or
-        select <columns> from <table_name> where <fc1> or <fc2> and <fc3>;//It will firstly pick
-        //the records satisfying fc3 and fc2 simultaneously and merge the result with the record
-        //satisfying fc1, you can use parentheses.
-        
-        //IN in a range of condtion similar to OR
-        select <columns> from <table_name> where <target> in (v1, v2, v3);
-        
-        //NOT
-        select <columns> from <table_name> where <target> not in (v1, v2, v3);//Pick up the 
-        //records not satisfying filter condition
-        ```
-        Use **Wildcards**: Select unknown value and Match the whole string
-        ```c
-        LIKE //A Predicate to use wildcards to match not value matching
-        //% wildcard represents any character in any amount but % will not match NULL
-        select <columns> from <table_name> where <col1> like "my%";//Find the records with col1's value 
-        //started by "my"
-        
-        //_ underscore wildcard match a single character
-        select <columns> from <table_name> where <col1> like "my_";//Find the records with col1's value
-        //started by "my" in length 3;
-        ```
+     ***WHERE*** filter condition ***after*** FROM ***before*** ORDER BY
+
+     ```c
+     select <columns> from <table_name> where <filter condition>;
+     //Operator
+     = equal, <> not equal, != not equal, < less than, <= less than or equal, > greater than >= greater than or equal, BETWEEN n AND m: n <= values <= m, IS (NOT) NULL: check if the value is null or not
+     ```
+
+     ​     Filter Combination:  
+
+     ```c  
+     Logic Operator:  //AND Satisfy all the filter conditions  select <columns> from <table_name> where <filter condition1> and <filter condition2>;
+     //OR Satisfy only one of the condition
+     select <columns> from <table_name> where <filter condition1> or <filter condition2>;
+     //And has a higher priority than or
+     select <columns> from <table_name> where <fc1> or <fc2> and <fc3>;//It will firstly pick
+     //the records satisfying fc3 and fc2 simultaneously and merge the result with the record
+     //satisfying fc1, you can use parentheses.
+     //IN in a range of condtion similar to OR
+     select <columns> from <table_name> where <target> in (v1, v2, v3);
+     //NOT
+     select <columns> from <table_name> where <target> not in (v1, v2, v3);//Pick up the 
+     //records not satisfying filter condition
+     ```
+
+      Use **Wildcards**:   Select unknown value and Match the whole string
+     ```c
+     LIKE //A Predicate to use wildcards to match not value matching
+     //% wildcard represents any character in any amount but % will not match NULL
+     select <columns> from <table_name> where <col1> like "my%";//Find the records with col1's value 
+     //started by "my"
+     //_ underscore wildcard match a single character
+     select <columns> from <table_name> where <col1> like "my_";//Find the records with col1's value
+     //started by "my" in length 3;
+     ```
+
         ***Tips***: Do not put the wildcard filter at the beginning. It will make the searching process slow.  
         **Regular Expression**: Match the substring        
-        ```c
+     ```c
         REGEXP//Regular Expression
         //Basic Character
         select <columns> from <table_name> where <col1> regexp "1000";//Select all the records with value
@@ -126,9 +127,10 @@
         
         //Check expression
         select "String" regexp "[0-9]"//Check if "String" contains number, return 0(not matching) or 1(matching)
-        ```
+     ```
+
    7. **Calculated Field**  
-   		Calculated filed is not inside database, it is created when select statement is executed.    
+       Calculated filed is not inside database, it is created when select statement is executed.    
         Concatenate:  
         ```c
         Concat()
@@ -138,7 +140,7 @@
         RTrim()
         select Concat(RTrim(col1), "(", RTrim(col2), ")") from <table_name> where <fc>//Remove the space 
         //at the end of each value.
-        ```  
+        ```
         Alias: Illegal to use the same name as one of the columns.
         ```c
         AS
@@ -147,8 +149,9 @@
         //Arithmetic Calculation: + - * /
         select col1, col2, col1 + col2 as sum_col from <table_name> where <fc>
         ```
+
    8. **Function**  
-   		* Text Function
+       * Text Function
           ```c
           select col1, Function(col1) as new_col1 from <table_name>
           Length(str)//Length of String str
@@ -186,74 +189,85 @@
            //Select a specific month;
            ```
           * Value Function
-          	```c
-          	Cos(x)//Cosine value. if x = pi cos(x) = -1
-            Sin(x)//Since value. if x = pi/2 sin(x) = 1
-            Tan(x)
-            Abs(x)//Absolute value
-            Sqrt(x)//Return square root of x. eg. x = 4 return 2
-            Exp(x)//Return e ^ x
-            Log(x)//Return ln(x)
-            Mod(a, b)// Return a % b
-            Pi()//Return pi
-            Rand()//Return a random number
-          	```
-           * Aggregate Function: Return a statistical value  
-           	 ```c
-             Avg(col)//Return average value of one specific column. It will ignore NULL value;
-             select avg(col1) as avg_col from <table_name> where <fc_name>;
-             Count(col)//Count the number of return rows, ignoring NULL
-             Count(*)//Count the number of rows including NULL
-             select count(col1) as count_col from <table_name> where <fc_name>;
-             Max(col)//Return the max value of one specific column among all the selected record, ignoring NULL
-             select max(col) as max_value from <table_name> where <fc_name>;
-             //Max can return the max value of date and string as well
-             Min(col)//Return the min value of one specific column among all the selected record, ignoring NULL
-             select min(col) as min_value from <table_name> where <fc_name>;
-             Sum(col)//Return total sum of the one specific column among all select records, ignoring null
-             select sum(col) as total_sum from <table_name> where <fc_name>;
-             Distinct//Just consider distinct value, the default is ALL value
-             select avg(distinct col) as avg_value from <table_name> where <fc_name>;
-             Distinct can be used to count(distinct col) but not count(distinct *)
+             ```c
+             Cos(x)//Cosine value. if x = pi cos(x) = -1
+             Sin(x)//Since value. if x = pi/2 sin(x) = 1
+             Tan(x)
+             Abs(x)//Absolute value
+             Sqrt(x)//Return square root of x. eg. x = 4 return 2
+             Exp(x)//Return e ^ x
+             Log(x)//Return ln(x)
+             Mod(a, b)// Return a % b
+             Pi()//Return pi
+             Rand()//Return a random number
              ```
+          	
+
+       * Aggregate Function: Return a statistical value  
+
+         ```c
+         Avg(col)//Return average value of one specific column. It will ignore NULL value;
+         select avg(col1) as avg_col from <table_name> where <fc_name>;
+         Count(col)//Count the number of return rows, ignoring NULL
+         Count(*)//Count the number of rows including NULL
+         select count(col1) as count_col from <table_name> where <fc_name>;
+         Max(col)//Return the max value of one specific column among all the selected record, ignoring NULL
+         select max(col) as max_value from <table_name> where <fc_name>;
+         //Max can return the max value of date and string as well
+         Min(col)//Return the min value of one specific column among all the selected record, ignoring NULL
+         select min(col) as min_value from <table_name> where <fc_name>;
+         Sum(col)//Return total sum of the one specific column among all select records, ignoring null
+         select sum(col) as total_sum from <table_name> where <fc_name>;
+         Distinct//Just consider distinct value, the default is ALL value
+         select avg(distinct col) as avg_value from <table_name> where <fc_name>;
+         Distinct can be used to count(distinct col) but not count(distinct *)
+         
+         ```
+
+         
+
+       
+
    9. **Group Data**
-		* Create group: **Group by**
-		   *  Group by can contain any number of columns. It can make embeded group. The group is built based on
-		   all the appointed columns not the single one.
-		   *  All the columns in the select except for the aggregate function should also appear in group by clause.
-		   *  All the Null value will be assigned to the same group.
-		   *  Group by must appear after where but before order by
-		   *  Group by cannot have aggreate function.
-			```c
-            select col1, count(col2) from table where fc group by col1;//Group the data from the table based on
-            //different value of col1
-            ```
+      * Create group: **Group by**
+           * Group by can contain any number of columns. It can make embeded group. The group is built based on
+              all the appointed columns not the single one.
+              *  All the columns in the select except for the aggregate function should also appear in group by clause.
+              *  All the Null value will be assigned to the same group.
+              *  Group by must appear after where but before order by
+              *  Group by cannot have aggreate function.
+              ```c
+               select col1, count(col2) from table where fc group by col1;//Group the data from the table based on
+               //different value of col1
+              ```
+           
          * Filter Group: **Having**: including some groups and excluding other groups 
-         	* The target of WHERE is row record, while HAVING is to deal with each group.
-         	* Actually all the conditin in where clause can also in HAVING
-         	* Where filters rows before grouping, having filters groups after grouping
-         	```c
-             select col1, count(col2) from table where fc1 group by col1 having fc2;//Group the data from the
-             //table based on different value of col1 and rule out all the groups not satisfying filter 
-             //condition2
-            ```
+            * The target of WHERE is row record, while HAVING is to deal with each group.
+              * Actually all the conditin in where clause can also in HAVING
+              * Where filters rows before grouping, having filters groups after grouping
+              ```c
+               select col1, count(col2) from table where fc1 group by col1 having fc2;//Group the data from the
+               //table based on different value of col1 and rule out all the groups not satisfying filter 
+               //condition2
+              ```
          * Difference between ORDER BY and GROUP BY:
-         	* order by's output are ordered, group by's output are group rows but not in order.
-         * Clause order	 
-        	**select -> from -> where -> group by -> having -> order by -> limit**
+            * order by's output are ordered, group by's output are group rows but not in order.
+            	 Clause order	 
+            	**select -> from -> where -> group by -> having -> order by -> limit**
+
      10. **Subquery**  
-     	 * Use subquery as filter:  
-           ```c
-           select col1, col2 from table1 where col1 in (select col1 from table2 where fc1);//Select record 
-           //based on the result from the subquery. The order is from inside query to outside query.
-           ```
-           In most cases the return column of inside query is only one column.   
-           Keep the number of column in WHERE the same as the number of column in internal query.
-         * Use subquery as calculated field:
-         	```c
-            select col1, col2, (select col3 from table1 whre fc2) as new_col from table1 where fc1;//The result
-            //of the subquery as a return field. For each row of the result, the subquery will execute one time.
-            //When one column's name of two tables are the same, we should use the full name rather than 
-            //partial name.
-            ```
+        * Use subquery as filter:  
+          ```c
+          select col1, col2 from table1 where col1 in (select col1 from table2 where fc1);//Select record 
+          //based on the result from the subquery. The order is from inside query to outside query.
+          ```
+          In most cases the return column of inside query is only one column.   
+          Keep the number of column in WHERE the same as the number of column in internal query.
+        * Use subquery as calculated field:
+        	```c
+          select col1, col2, (select col3 from table1 whre fc2) as new_col from table1 where fc1;//The result
+           //of the subquery as a return field. For each row of the result, the subquery will execute one time.
+           //When one column's name of two tables are the same, we should use the full name rather than 
+           //partial name.
+          ```
 
