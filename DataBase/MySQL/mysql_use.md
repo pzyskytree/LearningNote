@@ -390,18 +390,18 @@
 
       *  Joint with Aggregate Function
 
-        ```c
-        //Using Count to count the number of orders for each customer.
-        select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
-        from customers inner join orders on customers.cust_id = orders.cust_id 
-        group by customers.cust_id ;
-        //Left outer joint, there will be one count with value of zero. Since the 
-        //Order_num is null.
-        select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
-        from customers left outer join orders on customers.cust_id = orders.cust_id 
-        group by customers.cust_id ;
-        
-        ```
+           ```c
+           //Using Count to count the number of orders for each customer.
+           select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
+           from customers inner join orders on customers.cust_id = orders.cust_id 
+           group by customers.cust_id ;
+           //Left outer joint, there will be one count with value of zero. Since the 
+           //Order_num is null.
+           select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
+           from customers left outer join orders on customers.cust_id = orders.cust_id 
+           group by customers.cust_id ;
+
+           ```
 
 12.  Combined Query
 
