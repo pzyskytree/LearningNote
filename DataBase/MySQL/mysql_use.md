@@ -201,7 +201,6 @@
              Pi()//Return pi
              Rand()//Return a random number
              ```
-          	
 
        * Aggregate Function: Return a statistical value  
 
@@ -237,16 +236,23 @@
               *  Group by must appear after where but before order by
               *  Group by cannot have aggreate function.
               ```c
-               select col1, count(col2) from table where fc group by col1;//Group the data from the table based on
+               select col1, count(col2) 
+               from table 
+               where fc 
+               group by col1;//Group the data from the table based on
                //different value of col1
               ```
-           
+
        * Filter Group: **Having**: including some groups and excluding other groups 
             * The target of WHERE is row record, while HAVING is to deal with each group.
             * Actually all the conditin in where clause can also in HAVING
             * Where filters rows before grouping, having filters groups after grouping
               ```c
-               select col1, count(col2) from table where fc1 group by col1 having fc2;//Group the data from the
+               select col1, count(col2) 
+               from table 
+               where fc1 
+               group by col1 
+               having fc2;//Group the data from the
                //table based on different value of col1 and rule out all the groups not satisfying filter 
                //condition2
               ```
@@ -256,18 +262,186 @@
             **select -> from -> where -> group by -> having -> order by -> limit**
 
      10. **Subquery**  
-        * Use subquery as filter:  
-          ```c
-          select col1, col2 from table1 where col1 in (select col1 from table2 where fc1);//Select record 
-          //based on the result from the subquery. The order is from inside query to outside query.
-          ```
-          In most cases the return column of inside query is only one column.   
-          Keep the number of column in WHERE the same as the number of column in internal query.
-        * Use subquery as calculated field:
-        	```c
-          select col1, col2, (select col3 from table1 whre fc2) as new_col from table1 where fc1;//The result
-           //of the subquery as a return field. For each row of the result, the subquery will execute one time.
-           //When one column's name of two tables are the same, we should use the full name rather than 
-           //partial name.
-          ```
+      * Use subquery as filter:  
+        ```c
+        select col1, col2 
+        from table1 
+        where col1 in (select col1 
+        			   from table2
+                       where fc1);//Select record 
+        //based on the result from the subquery. The order is from inside query to outside query.
+        ```
+        In most cases the return column of inside query is only one column.   
+        Keep the number of column in WHERE the same as the number of column in internal query.
+      * Use subquery as calculated field:
+        ```c
+        select col1, col2, (select col3 from table1 whre fc2) as new_col 
+        from table1 
+        where fc1;//The result
+         //of the subquery as a return field. For each row of the result, the subquery will execute one time.
+         //When one column's name of two tables are the same, we should use the full name rather than 
+         //partial name.
+        ```
 
+11. Joint Table
+
+   1. Relation Table
+
+      It isn't suitable to store the same message into one table for many times. It is better to separate them into different tables.
+
+      ***Foreign Key:***  A primary key in other table which define the relationship between two tables.
+
+      * Save time and space.
+      * Once we need to update the data, we can only change one table.
+      * There is no duplicate data, so it remains the consistency of data.
+      * Great scalability, it can sustain the increasing workload.
+
+   2. Create Joint Table
+
+      ```c
+      Cartesian Product: 
+      //If there is no where clause as restriction, the result will be the cartesian 
+      //product between table1 and table2, the total row number is the product of
+      //the their row number.
+      select vend_name, prod_name, prod_price 
+      from products, vendors  
+      order by vend_name, prod_name;
+      
+      //Equijoin
+      select vend_name, prod_name,prod_price 
+      from products, vendors 
+      where vendors.vend_id = products.vend_id 
+      order by vend_name, prod_name;
+      //vendors.vend_id = products.vend_id build connection during the process of query
+      //Inner Join
+      select vend_name, prod_name, prod_price
+      from vendors inner join products on
+      vendors.vend_id = products.vend_id 
+      order by vend_name, prod_name;
+      //From clause build the join relationship. The filter condition is after on.
+      
+      //Multiple tables join
+      select prod_name, vend_name, prod_price, quantity 
+      from orderitems, products,vendors 
+      where products.vend_id = vendors.vend_id and orderitems.prod_id = 
+      products.prod_id;
+      ```
+
+   3. Create Advanced Joint Table
+
+      * Use Table Alias: Shorten the length of  SQL
+
+        ```c
+        //Table alias can be used in different clauses
+        select c.cust_name, c.cust_contact 
+        from customers as c, orders as o, orderitems as oi 
+        where c.cust_id = o.cust_id and oi.order_num = o.order_num 
+        and prod_id = "TNT2";
+        ```
+
+      * Self-Joint
+
+        ```c
+        //Joint between the same table. Make a cartesian product in the same table
+        // and pick the rows that satisfy the filter requirment. It is used to 
+        // substitute the subquery.
+        select p1.prod_id, p1.prod_name 
+        from products as p1, products as p2
+        where p1.vend_id = p2.vend_id and p2.prod_id = "DTNTR";
+        ```
+
+      * Natural-Joint
+
+        ```c
+        //The columns with same name try to merge them together. If they have the 
+        //same values, then join them into one record in the result. It will drop one
+        //column of the duplicate value, while inner joint will not. Natual joint is 
+        //special case of inner joint.
+        select c.*, o.order_num, o.order_date, oi.prod_id, oi.quantity,oi.item_price 
+        from customers as c, orders as o, orderitems as oi 
+        where c.cust_id = o.cust_id and oi.order_num = o.order_num 
+        and prod_id = 'FB';
+        
+        select c.*, o.order_num, o.order_date 
+        from customers as c, orders as o 
+        where c.cust_id = o.cust_id;
+        
+        ```
+
+        
+
+      * Outer-joint
+
+        ```c
+        //Out-joint will also return the not matching rows.
+        select customers.cust_id, orders.order_num 
+        from customers left outer join orders on customers.cust_id = orders.cust_id;
+        //Left outer joint, the right orders.order_num may be NULL. All the rows in 
+        //customers will be matched.  
+        
+        select customers.cust_id, orders.order_num 
+        from customers right outer join orders on customers.cust_id = orders.cust_id;
+        //Right outer joint, the left value may be NULL.All the right rows in orders
+        // will be matched.
+        
+        ```
+
+        
+
+      *  Joint with Aggregate Function
+
+        ```c
+        //Using Count to count the number of orders for each customer.
+        select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
+        from customers inner join orders on customers.cust_id = orders.cust_id 
+        group by customers.cust_id ;
+        //Left outer joint, there will be one count with value of zero. Since the 
+        //Order_num is null.
+        select customers.cust_name, customers.cust_id, count(orders.order_num) as num_ord 
+        from customers left outer join orders on customers.cust_id = orders.cust_id 
+        group by customers.cust_id ;
+        
+        ```
+
+12.  Combined Query
+
+  UNION: Get the Union result of multiple select result.
+
+   ```c
+  select vend_id, prod_id, prod_price 
+  from products
+  where prod_price <= 5
+  union
+  select vend_id, prod_id, prod_price
+  from products
+  where vend_id in (1001,1002);
+  //The two query result must have the same columns expression and aggregate funtions 
+  //in same order. It will only remain one of the duplicate record.
+  //The effect of union is similar to or:
+  select vend_id, prod_id, prod_price 
+  from products 
+  where prod_price <= 5 or vend_id in (1001,1002)
+  
+  //Retain all the duplicate rows.
+  select vend_id, prod_id, prod_price 
+  from products
+  where prod_price <= 5
+  union all
+  select vend_id, prod_id, prod_price
+  from products
+  where vend_id in (1001,1002);
+  
+  select vend_id, prod_id, prod_price  
+  from products 
+  where prod_price <= 5 
+  union 
+  select vend_id, prod_id, prod_price 
+  from products 
+  where vend_id in (1001,1002) 
+  order by vend_id, prod_price;
+  //Order by must be in the last select and the entire query can only have one order by.
+  
+  
+   ```
+
+  
