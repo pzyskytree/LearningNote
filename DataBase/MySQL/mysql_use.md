@@ -405,43 +405,43 @@
 
 12.  Combined Query
 
-  UNION: Get the Union result of multiple select result.
+     UNION: Get the Union result of multiple select result.
 
-   ```c
-  select vend_id, prod_id, prod_price 
-  from products
-  where prod_price <= 5
-  union
-  select vend_id, prod_id, prod_price
-  from products
-  where vend_id in (1001,1002);
-  //The two query result must have the same columns expression and aggregate funtions 
-  //in same order. It will only remain one of the duplicate record.
-  //The effect of union is similar to or:
-  select vend_id, prod_id, prod_price 
-  from products 
-  where prod_price <= 5 or vend_id in (1001,1002)
-  
-  //Retain all the duplicate rows.
-  select vend_id, prod_id, prod_price 
-  from products
-  where prod_price <= 5
-  union all
-  select vend_id, prod_id, prod_price
-  from products
-  where vend_id in (1001,1002);
-  
-  select vend_id, prod_id, prod_price  
-  from products 
-  where prod_price <= 5 
-  union 
-  select vend_id, prod_id, prod_price 
-  from products 
-  where vend_id in (1001,1002) 
-  order by vend_id, prod_price;
-  //Order by must be in the last select and the entire query can only have one order by.
-  
-  
-   ```
+      ```c
+     select vend_id, prod_id, prod_price 
+     from products
+     where prod_price <= 5
+     union
+     select vend_id, prod_id, prod_price
+     from products
+     where vend_id in (1001,1002);
+     //The two query result must have the same columns expression and aggregate funtions 
+     //in same order. It will only remain one of the duplicate record.
+     //The effect of union is similar to or:
+     select vend_id, prod_id, prod_price 
+     from products 
+     where prod_price <= 5 or vend_id in (1001,1002)
+
+     //Retain all the duplicate rows.
+     select vend_id, prod_id, prod_price 
+     from products
+     where prod_price <= 5
+     union all
+     select vend_id, prod_id, prod_price
+     from products
+     where vend_id in (1001,1002);
+
+     select vend_id, prod_id, prod_price  
+     from products 
+     where prod_price <= 5 
+     union 
+     select vend_id, prod_id, prod_price 
+     from products 
+     where vend_id in (1001,1002) 
+     order by vend_id, prod_price;
+     //Order by must be in the last select and the entire query can only have one order by.
+
+
+      ```
 
   
