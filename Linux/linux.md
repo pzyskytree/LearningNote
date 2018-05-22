@@ -397,7 +397,7 @@
 
     
 
-![VI Cheat Sheat](https://blog.hackingcodeschool.net/wpcontent/uploads/2016/12/YoQ0x.jpg)
+![VI Cheat Sheat](http://www.nathael.org/Data/vi-vim-cheat-sheet.svg)
 
 
 
