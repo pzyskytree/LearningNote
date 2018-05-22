@@ -399,5 +399,5 @@
 
 ![VI Cheat Sheat](http://www.nathael.org/Data/vi-vim-cheat-sheet.svg)
 
-
+![](../img/vi.png )
 
