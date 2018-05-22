@@ -306,3 +306,98 @@
       ```
 
     * HOWTO Documents: Describe the detail a certain aspect of configuring or using linux
+
+ 7. Editing File
+
+    ```c
+    //Determine the type of file
+    file <file_name>
+    file Public
+    //Public: directory
+    file hard_test
+    //hard_test: ASCII text
+    //Non-text files can be edited by a hex editor or the program that created them.
+    ```
+
+    Vi Editor: Default editor in UNIX, Full screen model,
+
+    Vi in Linux is ***Vim***(Vi improved)
+
+    Vi modes:
+
+    * Command Mode (Simple One Letter Mode)
+    * Edit Mode(insert text)
+    * ex mode (execute complicated commands)
+
+    ```c
+    vi <file_name>//If the file does not exist, it will create a new file.
+    // All the content of the file will be stored in buffer.
+    //The started mode is command mode.
+    Command Mode:
+    <left-arrow>,h//One Character left
+    <right-arrow>,l//One Charcter right
+    b,B//One word left
+    w,W//One word right
+    ^ //Begining of one line
+    $ //End of one line
+    ()//Last or next sentence
+    {}//Lat or next Paragraph
+    <up-arrow>,k//One line up
+    <down-arrow>,j//One line down
+    1G //Go to the first line of the file
+    G //Go to the last line of the file.
+    <ctrl-u>,<ctrl-d>// one half page up or down
+    <ctrl-b>,<ctrl-f>// one page back or forward.
+    
+    Edit text in command mode:
+    x//Delete single character under current cursor
+    X//Delete single character left of cursor.
+    u//Undo last change
+    .//Repeat last command
+    J//Join two lines together.
+     
+    / //Serch for pattern
+    n // Repeat the previous search
+    
+    dd //Cut a whole line into buffer
+    yy //Copy a whole line into buffer
+    dw //Cut a word from the current cursor to a space.
+    p //past the content of buffer here. Under the current line
+    P //past the content of buffer here. Above the current line
+    3dd,8yy//Cut and copy multiple lines into buffer.
+    
+    ZZ //save and exit.
+    ```
+
+    ```c
+    Edit Mode:IiAa //From command mode to edit mode
+    ESC//exit edit mode
+    I//Insert text at the beginning of the current line.
+    i//Insert text before the current cursor
+    a//Append text after the current cursor
+    A//Append text at the end of line.
+    ```
+
+    ```c
+    ex Mode: :
+    : 1,$s /old/new/g //Replacec old pattern with new pattern
+    1, $ //Search from the first line to the last line. . $ current line to the last
+         // % the entire file.
+    s //search and replace 
+    g //Global Replace
+    :set all//Display all setting
+    :set autoindent//Sets autoindent on 
+    :set tabstop=4//Set tab to 4 character jumps.
+    
+    :w :w! //save in ex mode
+    :q :q! //quit without saving
+    :wq  //save and exit in ex mode.
+    :x //save and exit in ex mode
+    ```
+
+    
+
+![VI Cheat Sheat](https://blog.hackingcodeschool.net/wpcontent/uploads/2016/12/YoQ0x.jpg)
+
+
+
