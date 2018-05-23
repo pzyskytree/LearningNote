@@ -1,6 +1,6 @@
 package Basic;
 
-public class Support extends Hero{
+public class Support extends Hero implements Healer{
 
 	public void heal() {
 		System.out.println(this.name  + " heals some injured hero" );
@@ -14,4 +14,5 @@ public class Support extends Hero{
 		h1.hp += hp;
 		System.out.println(this.name + " heals " + h1.name + " with " + hp + " bloods");
 	}
+	
 }

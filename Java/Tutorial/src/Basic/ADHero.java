@@ -1,31 +1,31 @@
 package Basic;
 
-public class ADHero extends Hero{
+public class ADHero extends Hero implements AD, Mortal{
 	
-	static {
-		System.out.println("Subclass static block " + maxHP);
-		maxHP = 2000;
-	}
-	
-	{
-		System.out.println("Subclass block " + itemCapacity);
-		itemCapacity = 20;
-	}
-	
+//	static {
+//		System.out.println("Subclass static block " + maxHP);
+//		maxHP = 2000;
+//	}
+//	
+//	{
+//		System.out.println("Subclass block " + itemCapacity);
+//		itemCapacity = 20;
+//	}
+//	
 	public ADHero() {
 //		super();
-		System.out.println("SubClass Constructor " + maxHP);
-		System.out.println("SubClass Constructor " + itemCapacity);
+//		System.out.println("SubClass Constructor " + maxHP);
+//		System.out.println("SubClass Constructor " + itemCapacity);
 	}
 	
 	public ADHero(String name, float hp) {
 		super(name, hp);
 	}
 
-	public void attack() {
-		System.out.println(this.name + " attack some hero.");
-	}
-	
+//	public void attack() {
+//		System.out.println(this.name + " attack some hero.");
+//	}
+//	
 	public void attack(Hero h) {
 		System.out.println(this.name + " attack " + h.name);
 	}
@@ -42,5 +42,22 @@ public class ADHero extends Hero{
 	
 	public void attack(Hero h1, int damage) {
 		h1.hp -= damage;
+	}
+	
+	public void physicAttack() {
+		System.out.println("Physical Attack");
+		
+	}
+
+	@Override
+	public void die() {
+		// TODO Auto-generated method stub
+		System.out.println("Physical Hero Die");
+		
+	}
+	
+//	@Override
+	public static void battleWin(){
+		System.out.println("AD Hero Battle Win!!");
 	}
 }

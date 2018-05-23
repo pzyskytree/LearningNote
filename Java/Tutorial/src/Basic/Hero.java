@@ -1,6 +1,6 @@
 package Basic;
 
-public class Hero {
+public  class Hero {
 	
 	protected String name = "some hero"; //Name of Hero
 	
@@ -13,24 +13,24 @@ public class Hero {
 	static float maxHP = 100;
 	//Initialization Block
 	
-	static {
-		System.out.println("Supper Class static block " + maxHP);
-		maxHP = 1000;
-	}
-	
+//	static {
+//		System.out.println("Supper Class static block " + maxHP);
+//		maxHP = 1000;
+//	}
+//	
 	public static String copyRight = "Blizzard";
 	
 	public int itemCapacity = 1;
 
-	{
-		System.out.println("Supper Class block " + itemCapacity);
-		itemCapacity = 10;
-	}
+//	{
+//		System.out.println("Supper Class block " + itemCapacity);
+//		itemCapacity = 10;
+//	}
 	
 	//It will be offered by the system if we don't write it explicitly.
 	public Hero() {
-		System.out.println("Supper Class Constructor " + maxHP);
-		System.out.println("Supper Class Constructor " + itemCapacity);
+//		System.out.println("Supper Class Constructor " + maxHP);
+//		System.out.println("Supper Class Constructor " + itemCapacity);
 	}
 	
 	//Once we provide a parametered constructor, there is no default constructor.
@@ -68,7 +68,7 @@ public class Hero {
 	//Battle win
 	public static void battleWin() {
 		System.out.println("Battle Win!!");
-		copyRight = "Blizzard Company";
+//		copyRight = "Blizzard Company";
 //		this.name = "wrong";//All the variables in static Mathod is static
 //		showAddressInMemory();// All the Method in the static method should be static
 	}
@@ -110,4 +110,46 @@ public class Hero {
 		h = new Hero("Teemo", 100);
 	}
 	
+	public void kill(Mortal m) {
+		m.die();
+	}
+	
+	public String toString() {
+		return name;
+	}
+	
+	public boolean equals(Object o) {
+		if (o instanceof Hero) {
+			Hero h = (Hero) o;
+			return h.name.equals(this.name);
+		}
+		return false;
+	}
+	
+	
+	public class BattleScore{
+		int kill;
+		int ide;
+		int assist;
+		
+		public void legendary() {
+			if (kill >= 8) {
+				System.out.println(name + " Legendary");
+			}else {
+				System.out.println(name + " Non-Legendary");
+			}
+		}
+	}
+	
+	public static class EnemyCrystal{
+		int hp = 5000;
+		public void checkIfWin() {
+			if (hp == 0) {
+				Hero.battleWin();
+//				System.out.println(name + "wins the game"); static inner class cannot 
+				//visit non-static atrribute name
+			}
+			System.out.println(Hero.copyRight);
+		}
+	}
 }
