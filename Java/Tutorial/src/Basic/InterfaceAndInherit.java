@@ -18,7 +18,7 @@ public class InterfaceAndInherit {
 		//3. Two class without inhertant relationship 
 		ad = new ADHero();
 		APHero ap = new APHero();
-//		ad = (ADHero)ap; Compiler Error
+//		ad = (ADHero)ap; //Compiler Error
 		//4. Class to Inteface
 		AD adi = ad; //OK
 		//5. Inteface to Class

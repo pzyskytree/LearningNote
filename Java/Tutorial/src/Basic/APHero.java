@@ -1,6 +1,6 @@
 package Basic;
 
-public class APHero implements AP, Mortal{
+public class APHero extends Hero implements AP, Mortal{
 
 	@Override
 	public void magicAttack() {

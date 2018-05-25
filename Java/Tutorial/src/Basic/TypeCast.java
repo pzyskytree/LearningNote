@@ -20,6 +20,7 @@ public class TypeCast {
 		byte b = 10;
 		s = 20;
 		i = 300;
+		
 		//b = i; Compile error;
 		b = (byte)s;
 		b = (byte)i;
