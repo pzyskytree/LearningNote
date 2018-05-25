@@ -51,7 +51,7 @@ ___
 word: 16-bit, double-word: 32-bit, quad word: 64-bit  
 byte:b,  word: w, double-word: l  
 IA32 not support 64 bit in hardware  
-Floating point: float(4-bit): s, double(8-bit): l, long double(10/12-bit): t  
+Floating point: float(4-Byte): s, double(8-Byte): l, long double(10/12-Byte): t  
 ___
 
 ### ***Access information***  
