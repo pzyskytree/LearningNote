@@ -1,4 +1,4 @@
-### Using MySQL
+###Using MySQL
 
 1. **Connect MySQL**
    ```c
@@ -262,30 +262,33 @@
             **select -> from -> where -> group by -> having -> order by -> limit**
 
      10. **Subquery**  
-      * Use subquery as filter:  
-        ```c
-        select col1, col2 
-        from table1 
-        where col1 in (select col1 
-        			   from table2
-                       where fc1);//Select record 
-        //based on the result from the subquery. The order is from inside query to outside query.
-        ```
-        In most cases the return column of inside query is only one column.   
-        Keep the number of column in WHERE the same as the number of column in internal query.
-      * Use subquery as calculated field:
-        ```c
-        select col1, col2, (select col3 from table1 whre fc2) as new_col 
-        from table1 
-        where fc1;//The result
-         //of the subquery as a return field. For each row of the result, the subquery will execute one time.
-         //When one column's name of two tables are the same, we should use the full name rather than 
-         //partial name.
-        ```
+
+        * Use subquery as filter:  
+          ```c
+          select col1, col2 
+          from table1 
+          where col1 in (select col1 
+          			   from table2
+                         where fc1);//Select record 
+          //based on the result from the subquery. The order is from inside query to outside query.
+          ```
+          In most cases the return column of inside query is only one column.   
+          Keep the number of column in WHERE the same as the number of column in internal query.
+        * Use subquery as calculated field:
+          ```c
+          select col1, col2, (select col3 from table1 whre fc2) as new_col 
+          from table1 
+          where fc1;//The result
+           //of the subquery as a return field. For each row of the result, the subquery will execute one time.
+           //When one column's name of two tables are the same, we should use the full name rather than 
+           //partial name.
+          ```
+
+      
 
 11. Joint Table
 
-   1. Relation Table
+   1.   Relation Table
 
       It isn't suitable to store the same message into one table for many times. It is better to separate them into different tables.
 
@@ -403,7 +406,7 @@
 
            ```
 
-12.  Combined Query
+12. Combined Query
 
      UNION: Get the Union result of multiple select result.
 
@@ -421,7 +424,7 @@
      select vend_id, prod_id, prod_price 
      from products 
      where prod_price <= 5 or vend_id in (1001,1002)
-
+     
      //Retain all the duplicate rows.
      select vend_id, prod_id, prod_price 
      from products
@@ -430,7 +433,7 @@
      select vend_id, prod_id, prod_price
      from products
      where vend_id in (1001,1002);
-
+     
      select vend_id, prod_id, prod_price  
      from products 
      where prod_price <= 5 
@@ -439,9 +442,165 @@
      from products 
      where vend_id in (1001,1002) 
      order by vend_id, prod_price;
-     //Order by must be in the last select and the entire query can only have one order by.
-
-
+     //Order by must be in the last select and the entire query can only have one order by
       ```
 
-  
+13.  Full-Text Search
+
+    * Build an Index for the value in each column.
+
+    ```c
+    //create table with full text and index
+    CREATE TABLE `productnotes` (
+      `note_id` int(11) NOT NULL AUTO_INCREMENT,
+      `prod_id` char(10) NOT NULL,
+      `note_date` datetime NOT NULL,
+      `note_text` text,
+      PRIMARY KEY (`note_id`),
+      FULLTEXT KEY `note_text` (`note_text`)
+    ) ENGINE=MyISAM AUTO_INCREMENT=115 DEFAULT CHARSET=latin1
+    //Build the index after importing all the data into the database;
+    
+    //Use Full text index Match() Against()
+    //The result is sorted based on relevance and pattern's position and numbers.
+    select col1
+    from table
+    where Match(col1) Against("Pattern");
+    //eg
+    select note_text
+    from productnotes
+    where Match(note_text) Against("rabbit");//Ignore cases 
+    //Equivalent
+    select note_text
+    from productnotes 
+    where note_text like "%rabbit%";
+    //Display Rank of each record
+    select note_text, match(note_text) against("rabbit") as rank 
+    from productnotes;
+    
+    ```
+
+    * Query Expansion
+
+    ```c
+    //Two times search, one is a basic full-text search and selet the useful words.
+    //The other is to search based on the useful words and pattern. Approximate Search
+    select col1
+    from table
+    where Match(col1) Against("Pattern" With Query Expansion);
+    //eg
+    select note_text 
+    from productnotes 
+    where match(note_text) against("anvils" with query expansion);
+    ```
+
+    * Boolean Text Query
+
+    ```c
+    //It can use for the column with out full text index but it is very slow
+    //In Boolean Mode
+     select col1
+    from table
+    where Match(col1) Against("Pattern" In Boolean Mode);
+    //Operator:
+    //+ must include
+    select note_text 
+    from productnotes 
+    where match(note_text) against("+rabbit +bait" in boolean mode);
+    //Include both words at the same time
+    select note_text 
+    from productnotes 
+    where match(note_text) against("rabbit bait" in boolean mode);
+    //Include either on the of the words;
+    
+    //- exlude * wildcard
+    select note_text 
+    from productnotes 
+    where match(note_text) against("heavy -rope*" in boolean mode);
+    //Include heavy exlude words with rope as prefix
+    
+    //> include increasing rank, < include but decreasing rank
+    select note_text
+    from productnotes
+    where match(note_text) against(">rabbit <carrot" in boolean mode);
+    
+    //() use for combining words to expression
+    select note_text 
+    from productnotes 
+    where match(note_text) against("+safe +(<combination)" in boolean mode);
+    ```
+
+    * Index does not contain the words with length less than 4
+    * stop word: word list that are ignored when building the index
+    * If a word occurs more than 50% of the record, it is a stop word
+    * ignore the ' inside word: don't == dont
+    * Full-Text can only be supported by MyISAM engine
+
+14. Insert Data
+
+    ```c
+    //1: insert an entire row
+    insert into <table>
+    values();
+    //eg: The value's order is consistent with the record inside table.
+    insert into customers  
+    values(NULL, "Pep E. LaPew", "100 Main Street", "Los Angeles" , "CA", "90046", "USA", NULL, NULL);
+    //eg more safe: specify the name of column
+    insert into customers(cust_name, cust_address, cust_city, cust_state, cust_zip, cust_country, cust_contact, cust_email)  
+    values("Pep E. LaPew", "100 Main Street", "San Fransisco" , "CA", "90046", "USA", NULL, NULL);
+    //If there is no column's name, we must specify all the value of each column. If we 
+    //are given the column's name, we should specify the value in the name list.
+    
+    //Insert Multiple values
+    insert into table()
+    values (),(),();
+    
+    //Insert data from one table to another
+    insert into table1(col1, col2)
+    select col3, col4
+    from table2;
+    ```
+
+    * Omitting Column: if the value can be null or specified the default value;
+    * Low_priority: Lower the priority of the insert operation; Insert low_priority into
+
+15. Update and Delete data
+
+    * Update : 1. Update specific rows, 2. Update all rows
+
+    ```c
+    update table
+    set col1 = new_value
+    where fc1.
+    // eg
+    update customers 
+    set cust_email = "elmer@fudd.com" 
+    where cust_id = 10005;
+    //Without where, it will update all the rows in the table.
+    update customers 
+    set cust_email = "elmer@fudd.com", cust_name = "The Fudd"  
+    where cust_id = 10005;
+    //Update Multiple columns 
+    //If one of the columns' update meets problem, the entire update will be canceled.
+    update ignore table .. 
+    //Ignore key word let the error be ignored and the update keeps working.
+    
+    update table
+    set col1 = null;
+    //Set one column to be NULL to delete this column.
+    ```
+
+    * Delete Data: 1. Delete specific rows 2. Delete all rows
+
+    ```c
+    //Delete is to delete the whole rows not one or some columns.
+    delete from table
+    where fc;
+    //It only delete the content or record inside the table but not delete table.
+    truncate table;//Delte all rows in the table;
+    //eg
+    delete from customers 
+    where cust_id = 10006;
+    ```
+
+    
