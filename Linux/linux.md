@@ -401,3 +401,124 @@
 
 ![](../img/vi.png )
 
+8. Shell Basic
+
+   Shell is a command line user interface to Linux: interact with operation system: bash, ksh, csh
+
+   Shell allows you to type command after which it interpret it and executes the corresponding program.
+
+   *  Metacharacters: special meaning: eg < > | ; ! * ? $ \ `  '  " ~ [] () {}
+   * Reserve words: words shell interprets as special commands.  : case do done if elif else esac while
+
+   ```c
+   //Basic Wildcard Expansion
+   //? any single character, * match any String 
+   ls ?ne?
+   ls n*
+   //. hidden file not include in wildcard match but .* can match
+   //Advanced WildCard Expansion
+   //[, ], -,!
+   ls ne[stw]//nes,net,new
+   ls test[1-4]//test1, test2, test3, test4
+   ls [!tn]*//not start with t or n
+   ```
+
+   * File Descriptor
+     * STDIN < 0: key board
+     * STDOUT > 1: terminal session
+     * STDERR 2> 2: terminal session
+
+      ```c
+   //Input redirction
+   cat //keyboard as input
+   cat < test //test as input file
+   
+   //Output redirction
+   ls //Terminal session
+   ls > ls.out //ls.out as output Overwrite
+   ls >> ls.out //Append
+   cat > new_file //Write the content type from keyboard to the newfile
+   cat >> new_file//Append the new File
+   
+   //Error redirection
+   cat file
+   //Output: cat: file: No such file or directory
+   cat file 2> error.file
+   cat error.file
+   //Output: cat: file: No such file or directory
+   cat file 2>> error.file //Append
+   cat file 2> /dev/null //Throw the error message away
+   
+   //Combination
+   cat < test > test.out 2> test.err
+   cat < test > test.out 2>&1 // Write both error and output message to test.out
+   cat < test 2>&1 > test.out //write error to the screen, output message to the test.out
+      ```
+
+   ```c
+   //Pipes |
+   command1 | command2
+   //The standard output of command1 is standard input of command2
+   ls -l | wc -l// Count how many files in the current directory
+   //Filters
+   command1 | filter | command2
+   ls | grep .out | wc -l //Count how many files's name ending with .out
+   //filter standard input stadard output
+   //Common Filter
+   grep //Match Pattern
+   ls | grep .out | wc -l
+   sed //String substitution
+   ls | sed s/test/train/ | cat //substitue all the file name containing test to train
+   ```
+
+   ![](../img/filter.png)
+
+   ```c
+   //Split output
+   tee //send the data to both standard output and a file
+   ls | tee ls.save | wc -l//capture the snapshot of information going through a pipe;
+   // Store the mid-result into a file.
+   
+   //Command Substitution
+   //Use the output of a command as the argument for another command
+   rm -i `ls *.out` //Use `` or $()to encompass the result of one command
+   rm -i $(ls *.err)
+   echo there are $(ps ax | wc -l) processes running//Count the number of running processes
+   ps//generate the detail of running process
+       
+   //Command Group
+   //;
+   date;pwd//Multiple commands separated by ;
+   { echo Print date: ; date ; cat test ; } | lpr
+   ( echo Print date: ; date ; cat test ) | lpr
+   ```
+
+   ```c
+   //Shell Variable
+   variable=value//no whitespace
+   var="hello";
+   var2=12;
+   //Reference variable
+   echo $var1
+   echo $var2
+   //export shell variable
+   //export the variable from parent to child process
+   //change making in child process does not affect the value in parent process
+   var=12
+   echo $var
+   //12
+   export var
+   pan@ubuntu:~$ bash
+   pan@ubuntu:~$ echo $var
+   12
+   pan@ubuntu:~$ var=123
+   pan@ubuntu:~$ echo $var
+   123
+   pan@ubuntu:~$ exit
+   exit
+   pan@ubuntu:~$ echo $var
+   12
+   
+   ```
+
+   

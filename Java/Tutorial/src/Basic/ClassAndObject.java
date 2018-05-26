@@ -20,7 +20,7 @@ public class ClassAndObject {
 		ADHero teemo = new ADHero();
 		teemo.name = "Teemo";
 		hunter.attack();
-		hunter.attack(garen);
+//		hunter.attack(garen);
 		hunter.attack(garen, teemo);
 		
 		//This

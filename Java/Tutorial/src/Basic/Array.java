@@ -65,7 +65,8 @@ public class Array {
 		//Arrays
 		//copyOfRange()
 		System.out.println("Arrays.copyOfRange()");
-		int[] arrCopy = Arrays.copyOfRange(a, 1, 20);//The last index 8 will not be included
+		int [] arrCopy = {1,2,3,4,5};
+		arrCopy = Arrays.copyOfRange(a, 5, 20);//The last index 8 will not be included
 		//Arrays.copyOfRange(a, 1, 1) will be empty. If last index is out of bound of a, it
 		// will pad 0 to the target array.
 		for (int i : arrCopy) {

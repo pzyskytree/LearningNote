@@ -1,18 +1,27 @@
 package Basic;
 
+import Median.IndexNegativeException;
+import Median.IndexOutOfRangeException;
+
 public interface IStringBuffer {
 
-	public void append(String str);
+	public void append(String str) 
+			throws IndexNegativeException, IndexOutOfRangeException,NullPointerException;
 	
-	public void append(char c);
+	public void append(char c)
+			throws IndexNegativeException, IndexOutOfRangeException,NullPointerException;
 	
-	public void insert(int pos, char b);
+	public void insert(int pos, char b)
+			throws IndexNegativeException, IndexOutOfRangeException,NullPointerException;
 	
-	public void insert(int post, String b);
+	public void insert(int post, String b)
+			throws IndexNegativeException, IndexOutOfRangeException,NullPointerException;
 	
-	public void delete(int start);
+	public void delete(int start) 
+			throws IndexOutOfRangeException, IndexNegativeException;
 	
-	public void delete(int start, int end);
+	public void delete(int start, int end)
+			throws IndexOutOfRangeException, IndexNegativeException;
 	
 	public void reverse();
 	

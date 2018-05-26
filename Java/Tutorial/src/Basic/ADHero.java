@@ -1,5 +1,7 @@
 package Basic;
 
+import Median.EnemyHeroIsDeadException;
+
 public class ADHero extends Hero implements AD, Mortal{
 	
 //	static {
@@ -26,7 +28,9 @@ public class ADHero extends Hero implements AD, Mortal{
 //		System.out.println(this.name + " attack some hero.");
 //	}
 //	
-	public void attack(Hero h) {
+	public void attack(Hero h) throws EnemyHeroIsDeadException {
+		if (h.hp == 0)
+			throw new EnemyHeroIsDeadException();
 		System.out.println(this.name + " attack " + h.name);
 	}
 	
