@@ -1,6 +1,10 @@
 package Basic;
 
-public  class Hero {
+import java.io.Serializable;
+
+public class Hero implements Serializable {
+	
+	private static final long serialVersionUID = 1L; 
 	
 	protected String name = "some hero"; //Name of Hero
 	
@@ -35,14 +39,14 @@ public  class Hero {
 	
 	//Once we provide a parametered constructor, there is no default constructor.
 	public Hero(String name) {
-		System.out.println("Constructor with one parameter");
+//		System.out.println("Constructor with one parameter");
 		this.name = name;
 	}
 	
 	//Constructor overload
 	public Hero(String name, float hp) {
 		this(name);
-		System.out.println("Constructor with two parameters");
+//		System.out.println("Constructor with two parameters");
 		this.hp = hp;
 	}
 	
@@ -95,8 +99,12 @@ public  class Hero {
 	}
 	
 	//Get Blood Volume;
-	float getHp() {
+	public float getHp() {
 		return this.hp;
+	}
+	
+	public String getName() {
+		return this.name;
 	}
 	
 	//Blood recovery
@@ -115,17 +123,17 @@ public  class Hero {
 	}
 	
 	public String toString() {
-		return name;
+		return name + " " + hp;
 	}
 	
-	public boolean equals(Object o) {
-		if (o instanceof Hero) {
-			Hero h = (Hero) o;
-			return h.name.equals(this.name);
-		}
-		return false;
-	}
-	
+//	public boolean equals(Object o) {
+//		if (o instanceof Hero) {
+//			Hero h = (Hero) o;
+//			return h.name.equals(this.name);
+//		}
+//		return false;
+//	}
+//	
 	
 	public class BattleScore{
 		int kill;
