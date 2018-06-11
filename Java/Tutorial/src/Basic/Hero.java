@@ -2,19 +2,21 @@ package Basic;
 
 import java.io.Serializable;
 
-public class Hero implements Serializable {
+public class Hero implements Serializable, Comparable{
 	
 	private static final long serialVersionUID = 1L; 
 	
-	protected String name = "some hero"; //Name of Hero
+	public String name = "some hero"; //Name of Hero
 	
-	protected float hp; //Blood Volume
+	public float hp; //Blood Volume
+	
+	public int damage;
 	
 	protected float armor;//Armor
 	
 	protected int moveSpeed; //Speed
 	
-	static float maxHP = 100;
+	static float maxHP = 1000;
 	//Initialization Block
 	
 //	static {
@@ -56,6 +58,13 @@ public class Hero implements Serializable {
 		this.armor = armor;
 		this.moveSpeed = moveSpeed;
 	}
+	
+	public Hero(String name, float hp, int damage) {
+		this.name = name;
+		this.hp = hp;
+		this.damage = damage;
+	}
+
 	//this: current object
 	public void showAddressInMemory() {
 		System.out.println("Show the virtual address of this: " + this);
@@ -123,7 +132,7 @@ public class Hero implements Serializable {
 	}
 	
 	public String toString() {
-		return name + " " + hp;
+		return "Hero [name= " +  name + " hp= " + hp + " damage= " + damage + " ]";
 	}
 	
 //	public boolean equals(Object o) {
@@ -159,5 +168,84 @@ public class Hero implements Serializable {
 			}
 			System.out.println(Hero.copyRight);
 		}
+	}
+
+	@Override
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		Hero h = (Hero)arg0;
+		return (int)(this.damage - h.damage);
+	}
+	
+	public boolean matched() {
+		return this.hp > 100 && this.damage < 50;
+	}
+	
+	
+	public void attackHero(Hero h) {
+//		try {
+//			Thread.sleep(1000);
+//		} catch(InterruptedException e) {
+//			e.printStackTrace();
+//		}
+//		
+		h.hp -= this.damage;
+		System.out.format("%s is attacking %s, %s's blood become %.0f\n", this.name, h.name, h.name, h.hp);
+		if (h.isDead())
+			System.out.println(h.name + " is dead");
+	}
+	
+	public boolean isDead() {
+		return this.hp <= 0;
+	}
+	//synchronized method = synchronized(this)
+	public synchronized void hurt() {
+//		if (this.hp == 1) {
+		while (this.hp == 1) {
+			try {
+				this.wait();
+			}catch(InterruptedException e) {
+				e.printStackTrace();
+			}
+		}
+		this.hp--;
+		this.notify();//May notify the hurt thread
+	}
+	
+	public void recover() {
+		synchronized(this) {
+//			if (this.hp >= Hero.maxHP){
+			while (this.hp >= Hero.maxHP) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			this.hp++;
+			this.notify();
+		}
+		
+	}
+	
+	public void adugen() {
+		Thread t1 = new Thread() {
+			public void run() {
+				while(true) {
+					try {
+						for (int i = 0; i < 3; i++) {
+							System.out.println("Adugen " + (i + 1));
+							Thread.sleep(1000);
+						}
+						System.out.println("Charging for 5 seconds");
+						Thread.sleep(5000);
+					}catch(InterruptedException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		};
+		t1.start();
 	}
 }

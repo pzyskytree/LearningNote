@@ -2,36 +2,45 @@ package Median;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+import java.util.Set;
 import java.util.Stack;
-
+import java.util.TreeSet;
 
 import Basic.ADHero;
 import Basic.Hero;
+import Basic.Item;
 import Basic.LifePotion;
 
 public class CollectionFrameWork {
 
-	public static class Node{
+	private static ArrayList heros;
+
+	public static class Node<T extends Comparable>{
 		
 		public Node leftNode;
 		
 		public Node rightNode;
 		
-		public Object value;
+		public T value;
 		
-		public void add(Object v) {
+		public void add(T v) {
 			if (null == this.value) {
 				this.value = v;
 				return;
 			}
-			if ((Integer)this.value - (Integer)v >= 0) {
+			if (this.value.compareTo(v) >= 0) {
 				if (leftNode == null)
 					leftNode = new Node();
 				leftNode.add(v);
@@ -118,10 +127,7 @@ public class CollectionFrameWork {
 		}
 	}
 	public static void main(String[] args) {
-		//ArrayList
-		//Method
-		//1. Add
-		ArrayList heros = new ArrayList();
+		heros = new ArrayList();
 		for (int i = 0; i < 5; i++)
 			heros.add(new Hero("hero " + i));
 		System.out.println(heros);
@@ -263,17 +269,288 @@ public class CollectionFrameWork {
 		dictionary.put("apc", "Magical Hero");
 		System.out.println(dictionary.get("adc"));
 		
+		//HashSet
+		HashSet<String> set = new HashSet<>();
+		set.add("green");
+		System.out.println(set);
+		set.add("green");
+		System.out.println(set);
+		//There is no guaranteed order
+		set.add("red");
+		set.add("yellow");
+		System.out.println(set);
+		//Traverse  Cannot use get since there is no order
+		//1. For each
+		for (String s : set) {
+			System.out.print(s + " ");
+		}
+		System.out.println();
+		//2. iterator
+		it = set.iterator(); 
+		while (it.hasNext()) {
+			String str = (String)it.next();
+			System.out.print(str + " ");
+		}
+		System.out.println();
 		
-		findHero();
+		//Collections
+		//1. reverse list
+		List<Integer> numbers = new ArrayList<>();
+		for (int i = 0; i < 10; i++)
+			numbers.add(i);
+		System.out.println(numbers);
+		Collections.reverse(numbers);
+		System.out.println(numbers);
+		//2. shuffle
+		Collections.shuffle(numbers);
+		System.out.println(numbers);
+		//3. sort
+		Collections.sort(numbers);
+		System.out.println(numbers);
+		//4. Swap
+		Collections.swap(numbers, 5, 3);
+		System.out.println(numbers);
+//		Collections.swap(numbers, 10, 3);// Index out of range exception
+		//5. Rotate
+		Collections.rotate(numbers, 2);//Right rotate 2 positions
+		System.out.println(numbers);
+		//6. synchronizedList
+		List<Integer> synchronizedNumber = (List<Integer>)Collections.synchronizedList(numbers);
 		
+		//Difference between arraylist and linkedlist
+		List<Integer> list = new ArrayList<>();
+//		insertFirst(list, "ArrayList");
+		list = new LinkedList<>();
+//		insertFirst(list, "LinkedList");
+//		modify(list, "LinkedList");
+		list = new ArrayList<>();
+//		modify(list, "ArrayList");
+//		insertMiddle(list, "ArrayList");
+		list = new LinkedList<>();
+//		insertMiddle(list, "LinkedList");
+		
+		//HashMap Hashtable
+		
+		Map<String, String> map = new HashMap<>();
+		map.put(null, "value");
+		map.put("key", null);//Both key and value can be null;
+		map = new Hashtable<>();//Thread safe
+//		map.put(null, "value");//Key and value cannot be null
+//		map.put("key", null);
+		
+		HashSet<Integer> hset = new HashSet<>();//Random Order
+		hset.add(88);
+		hset.add(888);
+		hset.add(8);
+		System.out.println(hset);
+		Set<Integer> tset = new TreeSet<>();// Ascending Order
+		tset.add(88);
+		tset.add(888);
+		tset.add(8);
+		System.out.println(tset);
+		Set<Integer> lhset = new LinkedHashSet<>(); //Insert order
+		lhset.add(88);
+		lhset.add(888);
+		lhset.add(8);
+		System.out.println(lhset);
+		
+		//HashCode
+		
+		System.out.println(hashcode("EE96"));
+		
+		heros = new ArrayList<Hero>();
+		for (int i = 0; i < 10; i++) {
+			heros.add(new Hero("hero " + i, (int)(Math.random() * 100)));
+		}
+		
+		System.out.println(heros);
+		//Use comparator compare
+//		Collections.sort(heros, new Comparator<Hero>() {
+//
+//			@Override
+//			public int compare(Hero arg0, Hero arg1) {
+//				// TODO Auto-generated method stub
+//				return (int)(arg1.getHp() - arg0.getHp());
+//			}
+//			
+//		});
+		Collections.sort(heros, (h, h2)->(int)(((Hero) h2).getHp() - ((Hero) h).getHp()));
+		System.out.println(heros);
+		
+		Collections.sort(heros);
+		System.out.println(heros);
+		comparableTest();
+//		selfTreeset();
+//		printPi();
+//		reverseKeyAndValue();
+//		generateRandomNumber(50);
+//		detectDuplicate();
+//		findHero();
 //		sortComparison();
 //		treeHeroSort();
 //		stackTest();
 //		deleteArrayList();
 //		myStringBuffer();
 	}
+	public static void insertFirst(List<Integer> list, String type) {
+		int total = (int)1e5;
+		final int num = 10;
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < total; i++) {
+			list.add(0, num);
+		}
+		System.out.println(type + " costs " + (System.currentTimeMillis() - start) + " milliseconds");
+	}
+	
+	public static void modify(List<Integer> list, String type) {
+		int total = (int)1e5;
+		int pos = 1000;
+		for (int i = 0; i < total; i++) {
+			list.add(i);
+		}
+		
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < total; i++) {
+			int n = list.get(pos);
+			n++;
+			list.set(pos, n);
+		}
+		System.out.println(type + " costs " + (System.currentTimeMillis() - start) + " milliseconds");
+		
+	}
+	
 	
 	//Practice
+	public static void comparableTest() {
+		List list = new ArrayList();
+		for (int i = 0; i < 10; i++) {
+			list.add(new LifePotion("potion", (int)(Math.random() * 100)));
+		}
+		System.out.println(list);
+		Collections.sort(list);
+		System.out.println(list);
+	}
+	
+	
+	public static void selfTreeset() {
+//		Set<Integer> set = new TreeSet<>(new Comparator<Integer>() {
+//
+//			@Override
+//			public int compare(Integer arg0, Integer arg1) {
+//				// TODO Auto-generated method stub
+//				return arg1 - arg0;
+//			}
+//			
+//		});
+//		Set<Integer>set = new TreeSet<>((i0, i1) -> i0 - i1);
+		Set<Integer>set = new TreeSet<>(CollectionFrameWork::compare);
+		set = new TreeSet<>((i0, i1) -> CollectionFrameWork.compare(i0, i1));
+		CollectionFrameWork cf = new CollectionFrameWork();
+		set = new TreeSet<>((i0, i1) -> cf.compare1(i0, i1));
+		set = new TreeSet<>(cf::compare1);
+		for (int i = 0 ; i < 10; i++) {
+			set.add((int)(Math.random() * 1000));
+		}
+		
+		System.out.println(set);
+	}
+	
+	public int compare1(Integer i1, Integer i2) {
+		return i1 - i2;
+	}
+	
+	public static int compare(Integer i1, Integer i2) {
+		return i1 - i2;
+	}
+	
+	public static int hashcode(String str) {
+		if (str == null || str.length() == 0)
+			return 0;
+		int hashcode = 0;
+		for (Character c : str.toCharArray())
+			hashcode += c;
+		hashcode = hashcode * 23 % 2000;
+		return hashcode;
+	}
+	
+	
+	public static void printPi() {
+		String pi = String.valueOf(Math.PI);
+		Set<Character> set = new LinkedHashSet<>();
+		for (Character c : pi.toCharArray()) {
+			if (Character.isDigit(c))
+				set.add(c);
+		}
+		System.out.println(set);
+	}
+	
+	
+	public static void reverseKeyAndValue() {
+		Map<String, String> map = new Hashtable<>();
+		map.put("adc", "Physical Hero");
+		map.put("apc", "Magical Hero");
+		map.put("t", "tank");
+		Map<String, String> temp = new HashMap<>();
+		System.out.println(map);
+		for (String s : map.keySet()) {
+			temp.put(map.get(s), s);
+		}
+		map.clear();
+		map.putAll(temp);
+		System.out.println(map);
+	}
+
+	public static void insertMiddle(List<Integer> list, String type) {
+		int len = (int)1e5;
+		int pos = 10;
+		long start = System.currentTimeMillis();
+		for (int i = 0; i < len; i++) {
+			list.add(list.size() / 2, i);
+		}
+		System.out.println(type + " costs " + (System.currentTimeMillis() - start) + " milliseconds");
+		
+	}
+	
+	public static void generateRandomNumber(int n) {
+		Set<Integer> set = new HashSet<>();
+		for (int i = 0; i < n; i++) {
+			int num = (int)(Math.random() * 100000);
+			while (set.contains(num)) {
+				num = (int)(Math.random() * 100000);
+			}
+			set.add(num);
+		}
+		System.out.println(set);
+		
+	}
+	
+	public static String generateRandomString(int n) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < n; i++) {
+			char c = (char)(Math.random() * 128);
+			while (!(Character.isDigit(c) || c >= 'a' && c <= 'z' || c >= 'A' && c <= 'Z')) {
+				c = (char)(Math.random() * 128);
+			}
+			sb.append(c);
+		}
+		return sb.toString();
+	}
+	
+	public static void detectDuplicate() {
+		String[] strs = new String[100];
+		for (int i = 0; i < strs.length; i++) {
+			strs[i] = generateRandomString(2);
+			System.out.print(strs[i] + " ");
+		}
+		System.out.println();
+		HashSet<String> hs = new HashSet<>();
+		for (String str : strs) {
+			if (hs.contains(str)) {
+				System.out.print(str + " ");
+			}
+			hs.add(str);
+		}
+	}
 	
 	public static void findHero() {
 		List<Hero> heros = new ArrayList<>();

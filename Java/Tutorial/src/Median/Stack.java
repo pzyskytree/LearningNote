@@ -2,11 +2,12 @@ package Median;
 
 import Basic.Hero;
 
-public interface Stack {
+public interface Stack<T> {
 
-	public void push(Hero h);
+	public void push(T h);
 	
-	public Hero pull();
+	public T pull();
 	
-	public Hero peek();
+	public T peek();
+
 }

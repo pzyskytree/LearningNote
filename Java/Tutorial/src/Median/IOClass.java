@@ -9,13 +9,11 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.net.StandardSocketOptions;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.Date;
@@ -279,6 +277,7 @@ public class IOClass {
 		str = new String("E:\\Java\\Test");
 		String dest = "E:\\Java\\Test\\Test";
 		search(new File(str), "name");
+		searchWithThreadPool(new File(str), "name");
 //		copyFolder(str, dest);
 //		copyFile(str, dest);	
 //		generateClass();
@@ -397,29 +396,70 @@ public class IOClass {
 		}
 	}
 	
+	private static class SearchThread extends Thread{
+		File f;
+		String search;
+		
+		public SearchThread(File f, String search) {
+			this.f = f;
+			this.search = search;
+		}
+		
+		public void run() {
+			try (FileReader fr = new FileReader(f);
+				 BufferedReader br = new BufferedReader(fr)){
+				while (true) {
+					String line = br.readLine();
+					if (null == line)
+						break;
+					if (line.contains(search)) {
+						System.out.printf("Find String %s inside the file %s%n", search, f.getAbsoluteFile());
+						break;
+					}
+				}
+			}catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	public static void search(File folder, String search) {
 		if (!folder.isDirectory())
 			return;
 		File[] files = folder.listFiles();
 		for (File f : files) {
 			if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
-				try(FileReader fr = new FileReader(f);
-					BufferedReader br = new BufferedReader(fr)){
-					while(true) {
-						String line = br.readLine();
-						if (null ==  line)
-							break;
-						if (line.contains(search)) {
-							System.out.printf("Find String %s inside the file %s%n", search, f.getAbsoluteFile());
-							break;
-						}
-					}
-					
-				}catch(IOException e) {
-					e.printStackTrace();
-				}
+				new IOClass.SearchThread(f, search).start();
 			}else {
 				search(f, search);	
+			}
+		}
+	}
+	
+	public static void searchWithThreadPool(File folder, String search) {
+		if (!folder.isDirectory())
+			return;
+		ThreadPool tpool = new ThreadPool(10);
+		File[] files = folder.listFiles();
+		for (File f : files) {
+			if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
+				tpool.add(new Runnable() {
+					@Override
+					public void run() {
+						// TODO Auto-generated method stub
+						try(FileReader fr = new FileReader(f)){
+							char[] words = new char[(int)f.length()];
+							fr.read(words);
+							if (String.valueOf(words).contains(search)) {
+								System.out.printf("Find String %s inside the file %s%n", search, f.getAbsoluteFile());
+							}
+						}catch(IOException e) {
+							e.printStackTrace();
+						}
+					}
+				});
+			}else {
+				searchWithThreadPool(f, search);	
 			}
 		}
 	}

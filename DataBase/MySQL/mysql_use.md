@@ -1,4 +1,4 @@
-###Using MySQL
+###  Using MySQL
 
 1. **Connect MySQL**
    ```c
@@ -15,7 +15,7 @@
   ```c
     show databases;//Display all the databases
     show tables; //List all the tables in the database
-    show columns from <table name>;//Display all the columns in one table
+    	show columns from <table name>;//Display all the columns in one table
     show status;//Display the status of server
     show grants;//Display the authority of user
     show errors;//Display the error messasge
@@ -43,12 +43,12 @@
   5. **Sort**  
      Clause: Select, From etc
       ```c
-       select <columns> from <table_name> order by <col1>(asc);//Sort the records based on 
+     select <columns> from <table_name> order by <col1>(asc);//Sort the records based on 
       //col1's value,col1 can not belong to <columns>
-      select <columns> from <table_name> order by <col1>, <col2>;//Sort the records firstly 
+     select <columns> from <table_name> order by <col1>, <col2>;//Sort the records firstly 
       //based on col1's value if col1 is the same use col2.
-      select <columns> from <table_name> order by <col1> desc;//Sort in descending order 
-      select <columns> from <table_name> order by <col1> desc, <col2>;//Sort col1 in 
+     select <columns> from <table_name> order by <col1> desc;//Sort in descending order 
+     select <columns> from <table_name> order by <col1> desc, <col2>;//Sort col1 in 
       //descending order but for col2 still ascending order, for multiple columns, we must
       //add desc after each of them
       ```
@@ -160,8 +160,8 @@
           Lower(str) //Transfer all the letter in the string to be lower case
           Left(str, n)//Return n left characters of str
           Right(str, n)//Return n right characters of str
-          Rtrim()//Remove the space at right;
-          Ltrim()//Remove the space at left;
+          Rtrim(str)//Remove the space at right;
+          Ltrim(str)//Remove the space at left;
           Substring(str, i, len)//i start index from 1 to length(str), len the length of substring
           Soundex(str)//Sound value
           ```
@@ -601,6 +601,273 @@
     //eg
     delete from customers 
     where cust_id = 10006;
+    ```
+
+16. Create Table
+
+    * Table's name
+    * Columns' name and definition
+
+    ```c
+    CREATE TABLE `customers` (IF NOT EXISTS) (
+      `cust_id` int(11) NOT NULL AUTO_INCREMENT,
+      `cust_name` char(50) NOT NULL,
+      `cust_address` char(50) DEFAULT NULL,
+      `cust_city` char(50) DEFAULT NULL,
+      `cust_state` char(5) DEFAULT NULL,
+      `cust_zip` char(10) DEFAULT NULL,
+      `cust_country` char(50) DEFAULT NULL,
+      `cust_contact` char(50) DEFAULT NULL,
+      `cust_email` char(255) DEFAULT NULL,
+      `quantity`   int NOT NULL DEFAULT 1,
+      PRIMARY KEY (`cust_id`)
+    ) ENGINE=InnoDB AUTO_INCREMENT=10009 DEFAULT CHARSET=latin1
+    //The name of table must not exist.
+    //IF NOT EXISTS only create the table when the name of table does not exist.
+    
+    //NULL allows not designating value when inserting new record.
+    
+    //Primary key can be multiple columns,and for each record the combination of
+    //there columns are unique.
+    //Primary key does not allow NULL value.
+    
+    //Auto_increment for each insert, it will increase by one automatically.
+    //For each table there is only one auto_increment column and it has index.
+    select last_insert_id() //Find the last id of inserted record.
+    
+    //Default 1 set the default value to one.(only allow constant as default value
+    // not function value)
+    
+    //Engine type:
+    InnoDB //Transaction Processing Engine not support full text
+    MEMORY //Like MyISAM but store the data into memory
+    MyISAM //Support full text bu not support transaction processing
+    // The foreign key cannot cross different engines.
+      
+    ALTER TABLE// change the defination of table
+    //eg
+    alter table vendors
+    add vend_phone char(20);
+    alter table vendors
+    drop column vend_phone;
+    //Alter table : define foreign key.
+    alter table orderitems
+    add constraint fk_orderitems_orders
+    foreign key (order_num) references orders(order_num);
+    
+    DROP TABLE <Table_name> //Delete table
+    
+    RENAME TABLE table1 To table2, table3 to table 4; //Rename Table
+    ```
+
+17. Use View
+
+    View: Virtual Table  It consists of the result of a sql query.
+
+    * Reuse the result of sql
+    * Use part of table not the entire table
+    * Protect the data
+    * View doesn't contain data
+
+    ```c
+    CREATE VIEW viewname AS //Create new view
+    SHOW CREATE VIEW viewname;
+    DROP VIEW viewname; //delete view
+    //Update view 
+    Drop then create
+    CRATE OR REPLACE VIEW
+    //eg.
+    create view productcustomers as
+    select cust_name, cust_contact, prod_id
+    from customers, orders, orderitems
+    where customers.cust_id = orders.cust_id
+    and orderitems.order_num = orders.order_num;
+    
+    select cust_name, cust_contact 
+    from productcustomers 
+    where prod_id = "TNT2";
+    
+    create view vendorlocation as 
+    select concat(rtrim(vend_name), ' (', rtrim(vend_country), ')') as vend_title
+    from vendors
+    order by vend_name;
+    
+    //Use view as filter
+    create view customeremaillist as
+    select cust_id, cust_name, cust_email
+    from customers
+    where cust_email is not null;
+    
+    //Use function
+    create view prodview as 
+    select vend_id, count(prod_id) 
+    from products 
+    group by vend_id 
+    having count(vend_id) > 2;
+    
+    //Update view
+    //If there is group by, join, subquery, union aggregation function, distinct inside
+    // view, it cannot be updated.
+    //Otherwise, if we insert into some records into the table, the view will be update.
+    ```
+
+18. Procedure
+
+    Multiple SQL sentences
+
+    * Simple 
+    * Safe
+    * High-performance
+
+    Use procedure
+
+    ```c
+    Delimiter # //Dfine delimiter
+    //Create new procedure
+    create procedure productpricing() 
+    begin  
+    	select avg(prod_price) as priceaverage 
+    	from products; 
+    end#
+    // Call procedure
+    call productpricing()#
+    // Delete procedure
+    Drop procedure if exists productpricing#
+    
+    //Variable storing the data temporarily
+    @variable
+    //Out: return varibale, in: passing in varibale, inout
+    //Define 
+    create procedure productpricing(
+    	out pl decimal(8,2),
+        out ph decimal(8,2),
+        out pa decimal(8,2)
+    )
+    begin 
+    	select min(prod_price)
+        into pl
+        from products;
+    	select max(prod_price)
+        into ph
+        from products;
+        select avg(prod_price)	
+        into pa
+        from products;
+    end#
+    ///Call the procedure
+    call productpricing(@pricelow, @pricehigh, @priceaverage)#
+    //Display the value of variable
+    select @pricelow, @pricehigh, @priceaverage#
+    
+    //use input parameter
+    create procedure ordertotal(
+    	in number int,
+        out total decimal(8,2)
+    )
+    begin
+    	select sum(quantity * item_price)
+        from orderitems
+        where order_num = number
+        into total;
+    end#
+    call ordertotal(20005, @total)#
+    select @total#
+    
+    //Complicated procedure with local variable and if statement
+    //Comment
+    -- Name:ordertotal
+    -- Parameter: onumber = order number
+    --           taxable = 0 if not taxable 1 if taxable
+    --           ototal = order total variable
+    
+    create procedure ordertotalwithtax(
+    	in onumber int,
+        in taxable boolean,
+        out ototal decimal(8,2)
+    )
+    begin
+    	declare total decimal(8,2);
+    	declare taxrate int default 6;
+    	
+    	select sum(quantity * item_price)
+        from orderitems
+        where onumber = order_num
+        into total;
+    
+        if taxable then
+        	select total + (total/100*taxrate) into total;	
+        end if;
+    	
+        select total into ototal;
+    end#
+    //Display the statement to create a procedure
+    show create procedure procedure_name;
+    
+    ```
+
+19. Cursor
+
+    ```c
+    //Create cursor: Use Declare
+    create procedure processorder()
+    begin
+    	declare ordernumbers cursor
+    	for
+    	select order_num from orders;
+    end#
+    
+    //Open/Close cursor
+    open cursor_name;
+    close cursor_name;
+    
+    //Use Cursor
+    //Fetch
+    create procedure processorder()
+    begin
+    	declare done boolean default 0;
+    	declare o int;
+    	
+    	declare orderNum cursor
+    	for
+    	select order_num from orders;
+    	
+    	declare continue handler for sqlstate "02000" set done=1;
+       
+        open orderNum;
+    	repeat
+    		--Get values
+    		fetch orderNum into o;
+    	until done end repeat;
+        close orderNum;	
+    end#
+    
+    //Use cursor and call function
+    create procedure processorders()
+    begin
+    	declare done boolean default 0;
+    	declare o int;
+    	declare t decimal(8,2);
+    	
+    	declare orderc cursor
+    	for
+    	select order_num from orders;
+    	
+    	declare continue handler for sqlstate "02000" set done=1;
+    
+    	create table if not exists ordertotals
+    	(order_num int, total decimal(8,2));
+    
+    	open orderc;
+    	repeat
+    		fetch orderc into o;
+    		call ordertotalwithtax(o, 1, t);
+    		insert into ordertotals(order_num, total)
+            values(o, t);
+    	until done end repeat;
+    	close orderc;
+    end#
+    		
+    
     ```
 
     
