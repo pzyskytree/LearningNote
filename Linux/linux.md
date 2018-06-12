@@ -33,7 +33,7 @@
     $ ls -R//list contents recursively
     $ ls <folder>//list all the files in the folder
     
-    $ passswd // Change your password minimum six characters
+    $ passwd // Change your password minimum six characters
     
     $ date //Shows the current date and time
     $ export TZ=EST// export time zone
@@ -149,7 +149,7 @@
     Each inode stores the attributes and disk block location(s) of the object's data.Filesystem object attributes may include metadata (times of last change,access, modification), as well as owner and permission data.    
 
     ***Hard Link***: 
-    * Associate another file with the an existing inode.They have the same content but not with same name.  
+    * Associate another file with the an existing inode. They have the same content but not with same name.  
     * Cannot create for folder or across file system. 
     * The file is not removed until all hard links to the file are removed
     ```c
@@ -160,7 +160,7 @@
     ```
     ***Soft Link***
     * Like a short cuts to files or diretories. Same content different name.
-    * Can link to directory and acroos file system
+    * Can link to directory and across file system
     * Useless once remove the file.
     ```c
     ln -s file1 file2//Soft link
@@ -313,7 +313,7 @@
     //Determine the type of file
     file <file_name>
     file Public
-    //Public: directory
+    //Public: direx`ctory
     file hard_test
     //hard_test: ASCII text
     //Non-text files can be edited by a hex editor or the program that created them.
@@ -362,8 +362,8 @@
     dd //Cut a whole line into buffer
     yy //Copy a whole line into buffer
     dw //Cut a word from the current cursor to a space.
-    p //past the content of buffer here. Under the current line
-    P //past the content of buffer here. Above the current line
+    p //paste the content of buffer here. Under the current line
+    P //paste the content of buffer here. Above the current line
     3dd,8yy//Cut and copy multiple lines into buffer.
     
     ZZ //save and exit.
@@ -401,124 +401,275 @@
 
 ![](../img/vi.png )
 
-8. Shell Basic
+8. Shell Basic  
 
-   Shell is a command line user interface to Linux: interact with operation system: bash, ksh, csh
+  Shell is a command line user interface to Linux: interact with operation system: bash, ksh, csh
 
-   Shell allows you to type command after which it interpret it and executes the corresponding program.
+  Shell allows you to type command after which it interpret it and executes the corresponding program.
 
-   *  Metacharacters: special meaning: eg < > | ; ! * ? $ \ `  '  " ~ [] () {}
-   * Reserve words: words shell interprets as special commands.  : case do done if elif else esac while
+*  Metacharacters: special meaning: eg < > | ; ! * ? $ \ `  '  " ~ [] () {}
+* Reserve words: words shell interprets as special commands.  : case do done if elif else esac while
+* default shell is bash
+
+```c
+//Basic Wildcard Expansion
+//? any single character, * match any String 
+ls ?ne?
+ls n*
+//. hidden file not include in wildcard match but .* can match
+//Advanced WildCard Expansion
+//[, ], -,!
+ls ne[stw]//nes,net,new
+ls test[1-4]//test1, test2, test3, test4
+ls [!tn]*//not start with t or n
+```
+
+* File Descriptor
+  * STDIN < 0: key board
+  * STDOUT > 1: terminal session
+  * STDERR 2> 2: terminal session
+
+```c
+//Input redirction
+cat //keyboard as input
+cat < test //test as input file
+
+//Output redirction
+ls //Terminal session
+ls > ls.out //ls.out as output Overwrite
+ls >> ls.out //Append
+cat > new_file //Write the content type from keyboard to the newfile
+cat >> new_file//Append the new File
+
+//Error redirection
+cat file
+//Output: cat: file: No such file or directory
+cat file 2> error.file
+cat error.file
+//Output: cat: file: No such file or directory
+cat file 2>> error.file //Append
+cat file 2> /dev/null //Throw the error message away
+
+//Combination
+cat < test > test.out 2> test.err
+cat < test > test.out 2>&1 // Write both error and output message to test.out
+cat < test 2>&1 > test.out //write error to the screen, output message to the test.out
+```
+
+```c
+//Pipes |
+command1 | command2
+//The standard output of command1 is standard input of command2
+ls -l | wc -l// Count how many files in the current directory
+//Filters
+command1 | filter | command2
+ls | grep .out | wc -l //Count how many files's name ending with .out
+//filter standard input stadard output
+//Common Filter
+grep //Match Pattern
+ls | grep .out | wc -l
+sed //String substitution
+ls | sed s/test/train/ | cat //substitue all the file name containing test to train
+```
+
+![](../img/filter.png)
+
+```c
+//Split output
+tee //send the data to both standard output and a file
+ls | tee ls.save | wc -l//capture the snapshot of information going through a pipe;
+// Store the mid-result into a file.
+
+//Command Substitution
+//Use the output of a command as the argument for another command
+rm -i `ls *.out` //Use `` or $()to encompass the result of one command
+rm -i $(ls *.err)
+echo there are $(ps ax | wc -l) processes running//Count the number of running processes
+ps//generate the detail of running process
+    
+//Command Group
+//;
+date;pwd//Multiple commands separated by ;
+{ echo Print date: ; date ; cat test ; } | lpr
+( echo Print date: ; date ; cat test ) | lpr
+```
+
+Shell Variable
+
+```c
+//Shell Variable
+variable=value//no whitespace
+var="hello";
+var2=12;
+//Reference variable
+echo $var1
+echo $var2
+//export shell variable
+//export the variable from parent to child process
+//change making in child process does not affect the value in parent process
+var=12
+echo $var
+//12
+export var
+bash
+echo $var
+//12
+var=123
+echo $var
+//123
+exit
+//ex
+echo $var
+//12
+
+//Standard Shell Variable
+echo $$ //PID
+//7350
+echo $PATH //Path which is searched for executable: place to search for not built-in
+//command
+// /home/pan/bin:/home/pan/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:
+// /usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+echo $PS1 //Primary shell prompt: shown when the shell is able to accept command
+// \[\e]0;\u@\h: \w\a\]${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\
+// [\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\$
+echo $PS2 //Secondary shell prompt: another line
+// >
+echo $PWD //Current working directory
+// /home/pan
+echo $HOME //Home directory of user
+// /home/pan
+echo $LANG //Language of user
+// en_US.UTF-8
+
+//Get return value from child process: echo $? 
+whoami
+// pan
+echo $?
+// 0 success
+cat file
+// cat: file: No such file or directory
+echo $?
+// 1 Failure
+```
+
+Quote Metacharacters or non-Metacharacter: \ ' "
+
+``` c
+//Not interpret $ : \$
+echo the amount is US\$5
+// the amount is US$5
+
+//'' quoting string
+echo 'the amount is $amount'
+the amount is $amount
+// "" allows interpret of $ ` and \
+echo "the amount is $amount"
+the amount is 5
+// \n \t \b    
+```
+
+Alias for command
+
+```c
+alias ll='ls -l'
+ll //ll is an alias of ls -l
+//total 76
+//drwxrwxr-x 2 pan pan 4096 May 15 11:44 C
+//drwxr-xr-x 2 pan pan 4096 May 12 22:36 Desktop
+unalias ll //delete ll alias
+ll
+// ll: command not found
+```
+9. Working with processes
+
+   Program is an executable file,  Process program being executed
+
+   All processes are started by other processes
+
+   The **init** process is started by kernel
 
    ```c
-   //Basic Wildcard Expansion
-   //? any single character, * match any String 
-   ls ?ne?
-   ls n*
-   //. hidden file not include in wildcard match but .* can match
-   //Advanced WildCard Expansion
-   //[, ], -,!
-   ls ne[stw]//nes,net,new
-   ls test[1-4]//test1, test2, test3, test4
-   ls [!tn]*//not start with t or n
-   ```
-
-   * File Descriptor
-     * STDIN < 0: key board
-     * STDOUT > 1: terminal session
-     * STDERR 2> 2: terminal session
-
-      ```c
-   //Input redirction
-   cat //keyboard as input
-   cat < test //test as input file
+   PID; //Process ID
+   echo $$ //PID of the shell process
+   //Process can be terminated by itself or by signal from other processes
    
-   //Output redirction
-   ls //Terminal session
-   ls > ls.out //ls.out as output Overwrite
-   ls >> ls.out //Append
-   cat > new_file //Write the content type from keyboard to the newfile
-   cat >> new_file//Append the new File
-   
-   //Error redirection
-   cat file
-   //Output: cat: file: No such file or directory
-   cat file 2> error.file
-   cat error.file
-   //Output: cat: file: No such file or directory
-   cat file 2>> error.file //Append
-   cat file 2> /dev/null //Throw the error message away
-   
-   //Combination
-   cat < test > test.out 2> test.err
-   cat < test > test.out 2>&1 // Write both error and output message to test.out
-   cat < test 2>&1 > test.out //write error to the screen, output message to the test.out
-      ```
-
-   ```c
-   //Pipes |
-   command1 | command2
-   //The standard output of command1 is standard input of command2
-   ls -l | wc -l// Count how many files in the current directory
-   //Filters
-   command1 | filter | command2
-   ls | grep .out | wc -l //Count how many files's name ending with .out
-   //filter standard input stadard output
-   //Common Filter
-   grep //Match Pattern
-   ls | grep .out | wc -l
-   sed //String substitution
-   ls | sed s/test/train/ | cat //substitue all the file name containing test to train
-   ```
-
-   ![](../img/filter.png)
-
-   ```c
-   //Split output
-   tee //send the data to both standard output and a file
-   ls | tee ls.save | wc -l//capture the snapshot of information going through a pipe;
-   // Store the mid-result into a file.
-   
-   //Command Substitution
-   //Use the output of a command as the argument for another command
-   rm -i `ls *.out` //Use `` or $()to encompass the result of one command
-   rm -i $(ls *.err)
-   echo there are $(ps ax | wc -l) processes running//Count the number of running processes
-   ps//generate the detail of running process
-       
-   //Command Group
-   //;
-   date;pwd//Multiple commands separated by ;
-   { echo Print date: ; date ; cat test ; } | lpr
-   ( echo Print date: ; date ; cat test ) | lpr
-   ```
-
-   ```c
-   //Shell Variable
-   variable=value//no whitespace
-   var="hello";
-   var2=12;
-   //Reference variable
-   echo $var1
-   echo $var2
-   //export shell variable
-   //export the variable from parent to child process
-   //change making in child process does not affect the value in parent process
-   var=12
-   echo $var
-   //12
-   export var
-   pan@ubuntu:~$ bash
-   pan@ubuntu:~$ echo $var
-   12
-   pan@ubuntu:~$ var=123
-   pan@ubuntu:~$ echo $var
-   123
+   pan@ubuntu:~$ echo $$
+   2991
+   pan@ubuntu:~$ bash //Start a new subshell and subprocess
+   pan@ubuntu:~$ echo $$
+   3003
+   pan@ubuntu:~$ date
+   Mon Jun 11 20:58:28 PDT 2018
    pan@ubuntu:~$ exit
-   exit
-   pan@ubuntu:~$ echo $var
-   12
+   pan@ubuntu:~$ echo $$
+   2991
    
+   //Monitor processes
+   ps //display processes started by current terminal
+   ps aux //a : all processes attached to the terminal, u: all other processes, x: more 
+   //columns;
+   ps l //show pid ppid priority number nice vlaue
+   pstree //shows process hierarchy
+   
+   //Control process : terminate kill stop/continue
+   //1. from shell started it using job number
+   //2. from anywhere use PID
+   
+   //1. Start process
+   // Foreground process: Process needs interaction with terminal.
+   //When foreground process is running you are not allow to type other command
+   find / -name README
+   // Background process &: Process that does not iteract with use, when it runs
+   //you can still type other command to the shell
+   find / -name README &
+   
+   <ctrl-z> //suspend process
+   jobs //list background or suspended jobs
+   fg %job_number//resume suspended task in foreground
+   bg %job_number//resume suspended task in background
+   kill %job_number 
+   
+   kill -signal PID //Control process from outside the shell that has started the 
+   //process
+   -1 hangup //Parent process dies
+   -2 interrupt //<ctrl-c>
+   -3 quit //<ctrl-\> core dump
+   -9 kill //Hundle by linux kernel
+   -15 terminate //regular timinate signal which is sent to process
+   //eg	
+   pan@ubuntu:~$ kill -1 3899 //Hangup
+   pan@ubuntu:~$ kill -3 3913 //<ctrl-c>
+   pan@ubuntu:~$ kill -2 3913
+   pan@ubuntu:~$ kill -15 3913 //exit
+   pan@ubuntu:~$ kill -9 3913 //killed 
+   
+   killall -signal name //kill all process by name
+   
+   nohup find / -name README &// allow process to continue even if you log off the 
+   //system 
+   
+   //Process Priority
+   +19 ~ +39 :Dynamic part
+   -20 ~ 0 ~ +19 : User defined, negative only allowed for root
+   0 : default
+   -60 ~ -20 : Reserved for kernel threads
+   CPU find the lowest priority number to run.
+   Priority number based on:
+   1. Nice value for process: the priority value of the process will not be lower than that
+   2. If a process has a certain amount of time it increases its process number.
+   3. After a process is idle for a while the process number decrease.
+   Processes with the same nice value get the equal amount of CPU time.
+   Proecsses with higher nice value get less CPU time.
+   
+   //nice start process iwht a user-definde nice vlaue
+   nice -n 10 find / -name a
+   nice find / -name a //Defau;t nice value 10
+   ps l //Show all the process and nice value priority number
+   renice <new-priority> <PID>
+   //eg
+   sudo renice 5 4204
+   
+   daemon : never ended process background process
    ```
 
    

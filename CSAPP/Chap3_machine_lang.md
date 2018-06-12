@@ -15,7 +15,7 @@ gcc -O1 -o hello hello.c // O1 level one optimization
 //but also hard to understand the generated machine code
 ```
 1. C preprocessor expands source code with include file
-2. Compliler generate assembly-code version of source file hello.s
+2. Compiler generate assembly-code version of source file hello.s
 3. Assembler converts assembly code into binary object-code hello.o
 4. Linker merge the hello.o and generate executable file hello
   
@@ -314,7 +314,7 @@ Eight Register:  32-bit
            //While
            int fact_do(int n){
                int result = 1;
-               while (n <= 1){
+               while (n >= 1){
                    result *= n;
                    n--;
                }
@@ -392,10 +392,65 @@ Eight Register:  32-bit
            cmovbe S, R  // CF | ZF   below or equal
            ```
 
+         * Switch : Jump table
+
+           ```c
+           int switch_eg(int x, int n){
+               int result = x;
+               switch(n){
+                   case 100: 
+                       result *= 13;
+                       break;
+                   case 102:
+                       result += 10;
+                   case 103:
+                       result += 11;
+                       break;
+                   case 104:
+                   case 106:
+                       result *= result;
+                       break;
+                   default:
+                       result = 0;
+               }
+               return result;
+           }
            
-
+           movl 8(%ebp), %edx //x
+           movl 12(%ebp), %eax //n
+           subl $100, %eax
+           cmpl 6, %eax
+           ja .L2
+           jmp *.L7(, %eax, 4)
+               
+           .L2:
+           	movl $0, %eax
+           	jmp .L8
            
+           .L5:
+           	movl %edx, %eax
+           	jmp .L8
+           .L3:
+           	leal (%edx, %edx, 2), %eax
+           	leal (%edx, %eax, 4), %eax
+           	jmp .L8
+           .L4:
+           	leal 10(%edx), %eax
+           	jmp .L8
+           .L9:
+           	addl $11 %eax
+           	jmp .L8
+           .L6:
+           	movl %edx, %eax
+           	imull %eax, %eax
+           .L8
+           
+           ```
 
+7. Procedure
 
+      * Stack Frame 
 
+        The stack is used for pass arguments, for storing return information for saving register and for local  storage.
 
+        
