@@ -672,4 +672,366 @@ ll
    daemon : never ended process background process
    ```
 
+10. Linux Utilities
+
+  ```c
+  find:
+  find path expression; // Search the file in the directory recursively that matches
+  // the boolean expression
+  find <from where> <search for> <do something to it>
+  //eg
+  pan@ubuntu:~$ find . -name test//Find all the files' names are test
+  pan@ubuntu:~$ find . -name '*test*'//Find all the files' names containing test
+  pan@ubuntu:~$ find . -name '*test*' -exec ls -i {} \; // -exec ls is executed for 
+  //each found file
+  pan@ubuntu:~$ find . -name 'test' -ok ls -i {} \; //-ok ask for whether to execute 
+  //ls or not
+  pan@ubuntu:~$ find . -perm 777 -exec ls -l {} \; //Find all the file and directory 
+  // with permission 777;
+  pan@ubuntu:~$ find . -name "*test*" -type f -a -size +2 // -a and -o or, find
+  // all the file with name containing test and size larger than 2 blocks (1024 bytes)
+  pan@ubuntu:~$ find . -name "test" -o -name "code*"//Find file with name being test or start with code
+  
+  locate:
+  locate <word>
+  //eg
+  an@ubuntu:~$ locate passwd //Locate file with path string contains passwd
+  
+  grep
+  grep <options> <pattern> <file_names> //Search for pattern and write matching lines
+  // to the terminal
+  //eg
+  pan@ubuntu:~$ grep Hello test*//Find all lines containing Hello in the file with 
+  //name start with test
+  pan@ubuntu:~$ grep -v Hello test* //-v reverse find all lines not containing Hello
+  Regular Expression
+  * 0 or more times of the preceding characer
+  . any one character
+  [a-f]
+  ^ start with, end with $
+  pan@ubuntu:~$ grep 'world!$' test
+  pan@ubuntu:~$ grep -c . test //-c Count of lines
+  //11
+  pan@ubuntu:~$ grep -l . test // -l print name of files
+  //test
+  pan@ubuntu:~$ grep -n . test // -n number of matching lines
+  /*1:Hello world!
+  2:Hello world!
+  3:Hello world!
+  4:Hello world!
+  5:Hello world!
+  6:Hello world!
+  7:Hello world!
+  8:Hello world!
+  9:Hello world!
+  10:Hello world!
+  11:Hello world!*/
+  pan@ubuntu:~$ grep -i hello test //-i ignore cases
+  /*Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!*/
+  pan@ubuntu:~$ grep -w Hell test //-w whole word match
+  pan@ubuntu:~$ grep Hell test
+  /*Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!*/
+  pan@ubuntu:~$ grep -f test test //use file test as input
+  /*Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!*/
+  
+  fgrep //fix string no regular expression
+  egrep // allow for multiple patterns
+  pan@ubuntu:~$ egrep 'hel|Hel' test
+  /*Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!
+  Hello world!*/
+  pan@ubuntu:~$ egrep 'hel|Hel' test*
+  /*test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test:Hello world!
+  test.cp:hello world.
+  test.cp:Hello world.
+  grep: testDir: Is a directory
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!
+  test.soft:Hello world!*/
+  
+  cut// Pull column out of text files
+  cut -f(field) -d(elimiter) file(s)
+  pan@ubuntu:~$ cut -f 1,2,3 -d: /etc/passwd //The first three columns seperated by :
+  /*root:x:0
+  daemon:x:1
+  bin:x:2
+  sys:x:3
+  sync:x:4
+  games:x:5
+  man:x:6
+  lp:x:7
+  mail:x:8
+  news:x:9
+  uucp:x:10
+  proxy:x:13
+  www-data:x:33
+  backup:x:34
+  list:x:38
+  irc:x:39
+  gnats:x:41
+  nobody:x:65534
+  systemd-timesync:x:100*/
+  cut -c(character) files
+  //eg
+  pan@ubuntu:~$ ps | cut -c -3,4-10 // 1 - 3 columns and 4 to the 10
+  /*  PID TTY 
+   7326 pts/
+   8126 pts/
+   8288 pts/
+   8289 pts/
+   8290 pts/
+   8294 pts/
+   8295 pts/
+   8296 pts/
+   8432 pts/
+   8433 pts/
+   8434 pts/
+   8724 pts/
+   8725 pts*/
    
+  sort //sort the lines in files
+  sort -t(delimiter) -k(field) -options file
+  //eg
+  pan@ubuntu:~$ cat animals
+  /*dog.2
+  cat.4
+  penguin.10
+  bird.5 */
+  pan@ubuntu:~$ sort animals
+  /*bird.5 
+  cat.4
+  dog.2
+  penguin.10*/
+  pan@ubuntu:~$ sort -k1.2 animals//Sort based on the second character
+  /*cat.4
+  penguin.10
+  bird.5 
+  dog.2*/
+  pan@ubuntu:~$ sort -t. -k2 animals //Based on the first character after .
+  /*penguin.10
+  dog.2
+  cat.4
+  bird.5 */
+  pan@ubuntu:~$ sort -t. -n -k2 animals //Based on the real number not character
+  /*dog.2
+  cat.4
+  bird.5 
+  penguin.10*/
+  
+  head //View first a few lines of file
+  head -lines files
+  //eg
+  pan@ubuntu:~$ cat animals
+  /*dog.2
+  cat.4
+  penguin.10
+  bird.5 */
+  pan@ubuntu:~$ head -3 animals
+  /*dog.2
+  cat.4
+  penguin.10*/
+  pan@ubuntu:~$ ls -l
+  /*total 344
+  -rw-rw-r-- 1 pan pan     31 Jun 13 05:10 animals
+  drwxrwxr-x 2 pan pan   4096 May 15 11:44 C
+  drwxr-xr-x 2 pan pan   4096 Jun 11 19:53 Desktop
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Documents
+  drwxr-xr-x 3 pan pan   4096 May 19 16:43 Downloads
+  drwxrwxr-x 3 pan pan   4096 May 16 16:29 eclipse
+  drwxrwxr-x 4 pan pan   4096 May 16 17:21 eclipse-workspace
+  -rw-r--r-- 1 pan pan   8980 May 12 22:32 examples.desktop
+  -rw-rw-r-- 1 pan pan      0 Jun 13 02:37 -exec
+  drwxrwxr-x 2 pan pan   4096 May 18 14:43 Java
+  -rw-rw-r-- 1 pan pan    182 May 25 19:35 ls.save
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Music
+  drwxrwxr-x 2 pan pan   4096 May 16 12:50 mysql
+  drw-rw-rw- 2 pan pan   4096 Jun 11 18:31 new
+  -rw------- 1 pan pan 259856 Jun 12 01:26 nohup.out
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Pictures
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Public
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Templates
+  -rw-rw-rw- 1 pan pan    143 Jun 11 20:23 test
+  -rw-r--r-- 1 pan pan     26 Jun 11 18:12 test.cp
+  drwxrwxr-x 2 pan pan   4096 Jun 11 18:13 testDir
+  lrwxrwxrwx 1 pan pan      4 Jun 11 18:17 test.soft -> test
+  drwxr-xr-x 2 pan pan   4096 May 12 22:36 Videos*/
+  pan@ubuntu:~$ ls -l | head -3
+  /*total 344
+  -rw-rw-r-- 1 pan pan     31 Jun 13 05:10 animals
+  drwxrwxr-x 2 pan pan   4096 May 15 11:44 C*/
+  
+  tail //Show last a few lines
+  //eg
+  pan@ubuntu:~$ cat animals 
+  /*dog.2
+  cat.4
+  penguin.10
+  bird.5 */
+  pan@ubuntu:~$ tail -3 animals //Last 3 lines
+  /*cat.4
+  penguin.10
+  bird.5 */
+  pan@ubuntu:~$ tail -n +3 animals //Show the lines except the first three lines
+  /*penguin.10
+  bird.5 */
+  pan@ubuntu:~$ tail -f animals //Monitor the change of file by other process
+  /*dog.2
+  cat.4
+  penguin.10
+  bird.5*/
+  
+  type //Path to a command: shell built-in
+  pan@ubuntu:~$ type find locate grep cut sort head tail
+  /*find is /usr/bin/find
+  locate is /usr/bin/locate
+  grep is aliased to `grep --color=auto'
+  cut is /usr/bin/cut
+  sort is hashed (/usr/bin/sort)
+  head is hashed (/usr/bin/head)
+  tail is hashed (/usr/bin/tail)*/
+  which //Where the binary is located not shell built-in
+  pan@ubuntu:~$ which find locate grep cut sort head tail
+  /*/usr/bin/find
+  /usr/bin/locate
+  /bin/grep
+  /usr/bin/cut
+  /usr/bin/sort
+  /usr/bin/head
+  /usr/bin/tail*/
+  //Difference between type and which
+  pan@ubuntu:~$ type echo
+  //echo is a shell builtin
+  pan@ubuntu:~$ which echo
+  //bin/echo
+  
+  whereis //binary source manual page of command
+  pan@ubuntu:~$ whereis find locate grep cut sort head tail
+  /*find: /usr/bin/find /usr/share/man/man1/find.1.gz /usr/share/info/find.info.gz
+  locate: /usr/bin/locate /usr/share/man/man1/locate.1.gz
+  grep: /bin/grep /usr/share/man/man1/grep.1.gz /usr/share/info/grep.info.gz
+  cut: /usr/bin/cut /usr/share/man/man1/cut.1.gz
+  sort: /usr/bin/sort /usr/share/man/man1/sort.1.gz
+  head: /usr/bin/head /usr/share/man/man1/head.1.gz
+  tail: /usr/bin/tail /usr/share/man/man1/tail.1.gz*/
+  
+  file //Find the type of file
+  pan@ubuntu:~$ file /etc/passwd /bin/ls /home/pan
+  /*/etc/passwd: ASCII text
+  /bin/ls:     ELF 32-bit LSB executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2, for GNU/Linux 2.6.32, BuildID[sha1]=5da723dfb25295d0356435f76f982e3fdca3a3d9, stripped
+  /home/pan:   directory*/
+  
+  join //Merge the sorted content of two files
+  pan@ubuntu:~$ cat test
+  /*bird 13
+  dog 1
+  elephant 32
+  monkey 4 
+  penguin 10
+  zebra 53*/
+  pan@ubuntu:~$ cat temp
+  /*bird 5
+  cat 4
+  dinasours 33
+  dog 2
+  penguin 10
+  zebra 23 */
+  pan@ubuntu:~$ join test temp //Seperated by space
+  /*bird 13 5
+  dog 1 2
+  penguin 10 10
+  zebra 53 23*/
+  pan@ubuntu:~$ paste test temp//Paste together
+  /*bird 13	bird 5
+  dog 1	cat 4
+  elephant 32	dinasours 33
+  monkey 4 	dog 2
+  penguin 10	penguin 10
+  zebra 53	zebra 23 */
+  
+  gzip //Compress 
+  pan@ubuntu:~$ ls -l examples.desktop 
+  //-rw-r--r-- 1 pan pan 8980 May 12 22:32 examples.desktop
+  pan@ubuntu:~$ gzip -v examples.desktop 
+  //examples.desktop:	 56.2% -- replaced with examples.desktop.gz
+  pan@ubuntu:~$ ls -l examples.desktop.gz //Small size
+  //-rw-r--r-- 1 pan pan 3968 May 12 22:32 examples.desktop.gz
+  zcat//View the content of zip file without unzip
+  pan@ubuntu:~$ zcat examples.desktop.gz 
+  /*[Desktop Entry]
+  Version=1.0
+  Type=Link
+  Name=Examples
+  Name[aa]=Ceelallo
+  Name[ace]=Contoh
+  Name[af]=Voorbeelde
+  Name[am]=ምሳሌዎች
+  Name[ht]=Egzanp
+  Name[hu]=Minták
+  أمثلة محتوى لأوبونتو
+  X-Ubuntu-Gettext-Domain=example-content*/
+  pan@ubuntu:~$ gunzip examples.desktop.gz//Unzip the zip file
+  
+  bzip2 //the original file will be deleted
+  pan@ubuntu:~$ bzip2 -v examples.desktop 
+  //examples.desktop:  2.444:1,  3.273 bits/byte, 59.09% saved, 8980 in, 3674 out.
+  pan@ubuntu:~$ bzcat examples.desktop.bz2 //View the content without decompress
+  pan@ubuntu:~$ bunzip2 examples.desktop.bz2//Decompress
+  ```
+
+  

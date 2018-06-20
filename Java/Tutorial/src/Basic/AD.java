@@ -1,5 +1,6 @@
 package Basic;
 
+@FunctionalInterface
 public interface AD {
 
 	public void physicAttack();

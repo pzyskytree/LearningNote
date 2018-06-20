@@ -284,7 +284,7 @@
            //partial name.
           ```
 
-      
+​      
 
 11. Joint Table
 
@@ -445,7 +445,7 @@
      //Order by must be in the last select and the entire query can only have one order by
       ```
 
-13.  Full-Text Search
+13. Full-Text Search
 
     * Build an Index for the value in each column.
 
@@ -865,9 +865,479 @@
             values(o, t);
     	until done end repeat;
     	close orderc;
-    end#
-    		
-    
+    end#		
     ```
+
+20. Trigger
+
+    Some operations will be executed automatically under certain circumstance.
+
+    Create Trigger
+
+    * Unique name in the same database
+    * Related table
+    * The activity the trigger is listening
+    * When to execute
+
+    ```c
+    //create trigger:
+    CREATE TRIGGER trigger_name
+    trigger_time
+    trigger_event ON tbl_name
+    FOR EACH ROW
+    trigger_stmt
+    /*trigger_name：标识触发器名称，用户自行指定；
+    trigger_time：标识触发时机，取值为 BEFORE 或 AFTER；
+    trigger_event：标识触发事件，取值为 INSERT、UPDATE 或 DELETE；
+    tbl_name：标识建立触发器的表名，即在哪张表上建立触发器；
+    trigger_stmt：触发器程序体，可以是一句SQL语句，或者用 BEGIN 和 END 包含的多条语句。*/
+    //eg
+    CREATE TRIGGER newhero AFTER INSERT ON hero FOR EACH ROW SELECT "Add new Hero";
+    //Only table support trigger, it is not suitable for view
+    //A table can mostly have 6 trigger for update delete insert.
+    
+    DROP TRIGGER newhero;//Delete a trigger
+    SHOW TRIGGERS;//Display all the triggers;
+    
+    //Insert Trigger
+    create trigger newproducts 
+    after insert on products
+    for each row
+    select new.order_num
+    //Delete Trigger
+    create trigger deleteorder 
+    before delete on
+    orders
+    for each row
+    begin
+    	insert into archive_orders(order_num, order_date, cust_id)
+        values(old.order_num, old.order_date, old.cust_id);
+    end#
+    //Update Trigger
+    create trigger updatevendor
+    before update on
+    vendors
+    for each row
+    set new.vend_state = Upper(new.vend_state);
+    ```
+
+21. Transaction Management (InnoDB)
+
+    Atomic: Whether all the operations are executed or none of them are executed
+
+    * Transaction
+    * Rollback
+    * Commit
+    * Savepoint
+
+     ```c
+    //Control Transaction Management
+    start transaction;
+    rollback;//Can only roll back upadte, delete, insert, but can not roll back create, 
+    //drop, alter table, select;
+    //eg
+    mysql> select * from hero;
+    /*+----+-------+--------+
+    | id | name  | damage |
+    +----+-------+--------+
+    |  1 | teemo |     32 |
+    +----+-------+--------+
+    1 row in set (0.00 sec)*/
+    mysql> start transaction;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> delete from hero;
+    //Query OK, 1 row affected (0.00 sec)
+    mysql> select * from hero;
+    //Empty set (0.00 sec)
+    mysql> rollback;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+--------+
+    | id | name  | damage |
+    +----+-------+--------+
+    |  1 | teemo |     32 |
+    +----+-------+--------+
+    1 row in set (0.00 sec)*/
+    
+    
+    //For common sql statement, it is autmatically commited
+    commit
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+*/
+    1 row in set (0.00 sec)
+    mysql> start transaction;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> insert into hero values(2, "garen");
+    //Query OK, 1 row affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    |  2 | garen |
+    +----+-------+
+    2 rows in set (0.00 sec)*/
+    mysql> commit;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    |  2 | garen |
+    +----+-------+
+    2 rows in set (0.00 sec)*/
+    
+    //savepoint 
+    savepoint p1;
+    rollback to p1;
+    //eg
+    mysql> start transaction;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> delete from hero where id = 2;
+    //Query OK, 1 row affected (0.02 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+
+    1 row in set (0.00 sec)*/
+    mysql> savepoint delete1; //Save a check point
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> insert into hero values(3, "garen");
+    //Query OK, 1 row affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    |  3 | garen |
+    +----+-------+
+    2 rows in set (0.00 sec)*/
+    mysql> rollback to delete1; //Roll back to the savepoint
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+
+    1 row in set (0.00 sec)*/
+    mysql> commit;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+
+    1 row in set (0.00 sec)*/
+    //After commit or rollback the savepoint will be released automatically.
+    
+    set autocommit = 0;
+    //eg
+    mysql> set autocommit = 0;
+    //Query OK, 0 rows affected (0.01 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+
+    1 row in set (0.00 sec)*/
+    mysql> insert into hero values(2,"gere");
+    //Query OK, 1 row affected (0.00 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    |  2 | gere  |
+    +----+-------+
+    2 rows in set (0.00 sec)*/
+    mysql> rollback;
+    //Query OK, 0 rows affected (0.01 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |
+    +----+-------+
+    1 row in set (0.00 sec)*/ 
+    mysql> insert into hero values(2, "garen");
+    //Query OK, 1 row affected (0.00 sec)
+    mysql> commit;
+    //Query OK, 0 rows affected (0.00 sec)
+    mysql> rollback;
+    //Query OK, 0 rows affected (0.01 sec)
+    mysql> select * from hero;
+    /*+----+-------+
+    | id | name  |
+    +----+-------+
+    |  1 | teemo |	
+    |  2 | garen |
+    +----+-------+
+    2 rows in set (0.00 sec)*/
+     ```
+
+22. Global and Local
+
+    ```c
+    //Charset
+    mysql> show character set; //Display all character sets
+    /*+----------+---------------------------------+---------------------+--------+
+    | Charset  | Description                     | Default collation   | Maxlen |
+    +----------+---------------------------------+---------------------+--------+
+    | big5     | Big5 Traditional Chinese        | big5_chinese_ci     |      2 |
+    | dec8     | DEC West European               | dec8_swedish_ci     |      1 |
+    | cp850    | DOS West European               | cp850_general_ci    |      1 |
+    | hp8      | HP West European                | hp8_english_ci      |      1 |
+    | koi8r    | KOI8-R Relcom Russian           | koi8r_general_ci    |      1 |
+    | latin1   | cp1252 West European            | latin1_swedish_ci   |      1 |
+    | latin2   | ISO 8859-2 Central European     | latin2_general_ci   |      1 |
+    | swe7     | 7bit Swedish                    | swe7_swedish_ci     |      1 |
+    | ascii    | US ASCII                        | ascii_general_ci    |      1 |
+    | ujis     | EUC-JP Japanese                 | ujis_japanese_ci    |      3 |
+    | sjis     | Shift-JIS Japanese              | sjis_japanese_ci    |      2 |
+    | hebrew   | ISO 8859-8 Hebrew               | hebrew_general_ci   |      1 |
+    | tis620   | TIS620 Thai                     | tis620_thai_ci      |      1 |
+    | euckr    | EUC-KR Korean                   | euckr_korean_ci     |      2 |
+    | koi8u    | KOI8-U Ukrainian                | koi8u_general_ci    |      1 |
+    | gb2312   | GB2312 Simplified Chinese       | gb2312_chinese_ci   |      2 |
+    | greek    | ISO 8859-7 Greek                | greek_general_ci    |      1 |
+    | cp1250   | Windows Central European        | cp1250_general_ci   |      1 |
+    | gbk      | GBK Simplified Chinese          | gbk_chinese_ci      |      2 |
+    | latin5   | ISO 8859-9 Turkish              | latin5_turkish_ci   |      1 |
+    | armscii8 | ARMSCII-8 Armenian              | armscii8_general_ci |      1 |
+    | utf8     | UTF-8 Unicode                   | utf8_general_ci     |      3 |
+    | ucs2     | UCS-2 Unicode                   | ucs2_general_ci     |      2 |
+    | cp866    | DOS Russian                     | cp866_general_ci    |      1 |
+    | keybcs2  | DOS Kamenicky Czech-Slovak      | keybcs2_general_ci  |      1 |
+    | macce    | Mac Central European            | macce_general_ci    |      1 |
+    | macroman | Mac West European               | macroman_general_ci |      1 |
+    | cp852    | DOS Central European            | cp852_general_ci    |      1 |
+    | latin7   | ISO 8859-13 Baltic              | latin7_general_ci   |      1 |
+    | utf8mb4  | UTF-8 Unicode                   | utf8mb4_general_ci  |      4 |
+    | cp1251   | Windows Cyrillic                | cp1251_general_ci   |      1 |
+    | utf16    | UTF-16 Unicode                  | utf16_general_ci    |      4 |
+    | utf16le  | UTF-16LE Unicode                | utf16le_general_ci  |      4 |
+    | cp1256   | Windows Arabic                  | cp1256_general_ci   |      1 |
+    | cp1257   | Windows Baltic                  | cp1257_general_ci   |      1 |
+    | utf32    | UTF-32 Unicode                  | utf32_general_ci    |      4 |
+    | binary   | Binary pseudo charset           | binary              |      1 |
+    | geostd8  | GEOSTD8 Georgian                | geostd8_general_ci  |      1 |
+    | cp932    | SJIS for Windows Japanese       | cp932_japanese_ci   |      2 |
+    | eucjpms  | UJIS for Windows Japanese       | eucjpms_japanese_ci |      3 |
+    | gb18030  | China National Standard GB18030 | gb18030_chinese_ci  |      4 |
+    +----------+---------------------------------+---------------------+--------+
+    41 rows in set (0.00 sec)*/
+    
+    //Collation for character sort in order by and group by
+    mysql> show collation;
+    /*+--------------------------+----------+-----+---------+----------+---------+
+    | Collation                | Charset  | Id  | Default | Compiled | Sortlen |
+    +--------------------------+----------+-----+---------+----------+---------+
+    | big5_chinese_ci          | big5     |   1 | Yes     | Yes      |       1 |
+    | big5_bin                 | big5     |  84 |         | Yes      |       1 |
+    | dec8_swedish_ci          | dec8     |   3 | Yes     | Yes      |       1 |
+    | dec8_bin                 | dec8     |  69 |         | Yes      |       1 |
+    | cp850_general_ci         | cp850    |   4 | Yes     | Yes      |       1 |
+    | cp850_bin                | cp850    |  80 |         | Yes      |       1 |
+    | hp8_english_ci           | hp8      |   6 | Yes     | Yes      |       1 |
+    | hp8_bin                  | hp8      |  72 |         | Yes      |       1 |
+    | koi8r_general_ci         | koi8r    |   7 | Yes     | Yes      |       1 |
+    | koi8r_bin                | koi8r    |  74 |         | Yes      |       1 |
+    | latin1_german1_ci        | latin1   |   5 |         | Yes      |       1 |
+    | latin1_swedish_ci        | latin1   |   8 | Yes     | Yes      |       1 |
+    | latin1_danish_ci         | latin1   |  15 |         | Yes      |       1 |
+    | latin1_german2_ci        | latin1   |  31 |         | Yes      |       2 |
+    | latin1_bin               | latin1   |  47 |         | Yes      |       1 |
+    | latin1_general_ci        | latin1   |  48 |         | Yes      |       1 |
+    | latin1_general_cs        | latin1   |  49 |         | Yes      |       1 |
+    | latin1_spanish_ci        | latin1   |  94 |         | Yes      |       1 |
+    */
+    
+    mysql> show variables like 'character%'; //Check the character set;
+    /*+--------------------------+----------------------------+
+    | Variable_name            | Value                      |
+    +--------------------------+----------------------------+
+    | character_set_client     | utf8                       |
+    | character_set_connection | utf8                       |
+    | character_set_database   | latin1                     |
+    | character_set_filesystem | binary                     |
+    | character_set_results    | utf8                       |
+    | character_set_server     | latin1                     |
+    | character_set_system     | utf8                       |
+    | character_sets_dir       | /usr/share/mysql/charsets/ |
+    +--------------------------+----------------------------+
+    8 rows in set (0.02 sec)*/
+    
+    mysql> show variables like 'collation%';
+    /*+----------------------+-------------------+
+    | Variable_name        | Value             |
+    +----------------------+-------------------+
+    | collation_connection | utf8_general_ci   |
+    | collation_database   | latin1_swedish_ci |
+    | collation_server     | latin1_swedish_ci |
+    +----------------------+-------------------+
+    3 rows in set (0.00 sec)
+    */
+    ```
+
+23. Security
+
+    * Visiting Control
+
+      Not use root. It has the total control of the database
+
+    * Manage User
+
+      ```c
+      //User information store in mysql database and user table
+      USE mysql;
+      select user from user;
+      //eg
+      mysql> select user from user;
+      /*+------------------+
+      | user             |
+      +------------------+
+      | debian-sys-maint |
+      | mysql.session    |
+      | mysql.sys        |
+      | root             |
+      +------------------+*/
+      
+      //Create User
+      CREATE USER <user_name> IDENTIFIED BY <password>
+      //eg
+      mysql> create user alan identified by '12345';
+      mysql> select User from user;
+      /*+------------------+
+      | User             |
+      +------------------+
+      | alan             |
+      | debian-sys-maint |
+      | mysql.session    |
+      | mysql.sys        |
+      | root             |
+      +------------------+*/
+      
+      //Rename User
+      RENAME USER <user-name> TO <new_user_name>;
+      //eg
+      mysql> rename user alan to pan;
+      mysql> select user from user;
+      /*+------------------+
+      | user             |
+      +------------------+
+      | pan              |
+      | debian-sys-maint |
+      | mysql.session    |
+      | mysql.sys        |
+      | root             |
+      +------------------+*/
+      
+      //Delete User
+      DROP USER <user_name>;
+      mysql> drop user pan;
+      mysql> select user from user;
+      /*+------------------+
+      | user             |
+      +------------------+
+      | debian-sys-maint |
+      | mysql.session    |
+      | mysql.sys        |
+      | root             |
+      +------------------+*/
+      
+      //Set visiting authority
+      SHOW GRANTS FOR <user_name>
+      //eg
+      mysql> show grants for alan;
+      /*+----------------------------------+
+      | Grants for alan@%                |
+      +----------------------------------+
+      | GRANT USAGE ON *.* TO 'alan'@'%' |
+      +----------------------------------+
+      1 row in set (0.00 sec)*/ //No Grants
+      mysql> use test;
+      //ERROR 1044 (42000): Access denied for user 'alan'@'%' to database 'test'
+      
+      //Grant Right
+      GRANT <RIGHT> ON <DATABASE> TO <User>;
+      mysql> grant select on test.* to alan;
+      mysql> show grants for alan;
+      +----------------------------------------+
+      | Grants for alan@%                      |
+      +----------------------------------------+
+      | GRANT USAGE ON *.* TO 'alan'@'%'       |
+      | GRANT SELECT ON `test`.* TO 'alan'@'%' |
+      +----------------------------------------+
+      2 rows in set (0.00 sec)
+      //Revoke Right
+      REVOKE <RIGHT> ON <DATABASE> FROM <USer>;
+      mysql> revoke select on test.* from alan;
+      //Query OK, 0 rows affected (0.00 sec)
+      mysql> show grants for alan;
+      /*+----------------------------------+
+      | Grants for alan@%                |
+      +----------------------------------+
+      | GRANT USAGE ON *.* TO 'alan'@'%' |
+      +----------------------------------+
+      1 row in set (0.00 sec)*/
+      mysql> grant insert, select on test.* to alan;
+      //Query OK, 0 rows affected (0.00 sec)
+      mysql> show grants for alan;
+      /*+------------------------------------------------+
+      | Grants for alan@%                              |
+      +------------------------------------------------+
+      | GRANT USAGE ON *.* TO 'alan'@'%'               |
+      | GRANT SELECT, INSERT ON `test`.* TO 'alan'@'%' |
+      +------------------------------------------------+
+      2 rows in set (0.00 sec)*/
+      //Right:
+      ALL : All right, Alter, Create, Delete, Drop, Insert, Select, Update....;
+      
+      //Reset Password
+      SET PASSWORD FOR <User> = Password(<password>);
+      mysql> set password for alan = password('123');
+      //Query OK, 0 rows affected, 1 warning (0.00 sec)
+      mysql> set password = password('1234');//Change current user's password
+      ```
+
+24. Database Maintaining
+
+    * Back-Up of Data
+
+    * Database Maintaining
+
+      ```c
+      //Check table key
+      ANALYZE TABLE <table_name>;
+      mysql> analyze table products;
+      /*+---------------+---------+----------+----------+
+      | Table         | Op      | Msg_type | Msg_text |
+      +---------------+---------+----------+----------+
+      | test.products | analyze | status   | OK       |
+      +---------------+---------+----------+----------+
+      1 row in set (0.02 sec)*/
+      CHECK TABLE <table_name>;
+      check table orders;
+      /*+-------------+-------+----------+----------+
+      | Table       | Op    | Msg_type | Msg_text |
+      +-------------+-------+----------+----------+
+      | test.orders | check | status   | OK       |
+      +-------------+-------+----------+----------+
+      1 row in set (0.00 sec)*/
+      ```
+
+      
+
+    
 
     

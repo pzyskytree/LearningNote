@@ -19,10 +19,11 @@ public class Hero implements Serializable, Comparable{
 	static float maxHP = 1000;
 	//Initialization Block
 	
-//	static {
-//		System.out.println("Supper Class static block " + maxHP);
-//		maxHP = 1000;
-//	}
+	static {
+		//System.out.println("Supper Class static block " + maxHP);
+		System.out.println("Static initialize");
+		maxHP = 1000;
+	}
 //	
 	public static String copyRight = "Blizzard";
 	
@@ -71,7 +72,7 @@ public class Hero implements Serializable, Comparable{
 	}
 	
 	public void setName(String name) {
-		name = name;
+		this.name = name;
 	}
 	
 	public void setNameWithThis(String name) {
@@ -131,9 +132,13 @@ public class Hero implements Serializable, Comparable{
 		m.die();
 	}
 	
+	@Override
 	public String toString() {
 		return "Hero [name= " +  name + " hp= " + hp + " damage= " + damage + " ]";
 	}
+	
+
+	
 	
 //	public boolean equals(Object o) {
 //		if (o instanceof Hero) {

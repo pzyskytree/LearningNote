@@ -28,4 +28,10 @@ public class ADAPHero implements AD, AP, Mortal{
 		System.out.println("APAD attack");
 	}
 
+	@Override
+	public void test() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
