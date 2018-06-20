@@ -1,3 +1,5 @@
+
+
 ### Linux
 
 1. **History**  
@@ -1034,4 +1036,247 @@ ll
   pan@ubuntu:~$ bunzip2 examples.desktop.bz2//Decompress
   ```
 
-  
+11. Shell Script
+
+   Shell Script:  Collection of commands in a text file.
+
+   ```c
+   invoke shell scripts
+   //1. Bash : Start with a subshell, Script should be readable not need to be 
+   //executable
+   pan@ubuntu:~$ cat script1 
+   /*date
+   pwd */
+   pan@ubuntu:~$ bash script1 
+   /*Tue Jun 19 23:22:48 PDT 2018
+   /home/pan*/
+   pan@ubuntu:~$ ls -l script1 
+   //-rw-rw-r-- 1 pan pan 10 Jun 19 23:21 script1
+   
+   //2. . or source: Start in the current shell, do not need to be executable
+   pan@ubuntu:~$ . script1 
+   /*Tue Jun 19 23:28:12 PDT 2018
+   /home/pan*/
+   pan@ubuntu:~$ source script1 
+   /*Tue Jun 19 23:28:21 PDT 2018
+   /home/pan*/
+   pan@ubuntu:~$ ls -l script1 
+   //-rw-rw-r-- 1 pan pan 10 Jun 19 23:21 script1
+   
+   //3. chmod 775 or u+x to make the file execuatble, and run it like a command in a 
+   //subshell
+   pan@ubuntu:~$ chmod u+x script1 
+   pan@ubuntu:~$ ls -l script1 
+   //-rwxrw-r-- 1 pan pan 10 Jun 19 23:21 script1
+   pan@ubuntu:~$ ./script1 
+   //Tue Jun 19 23:30:37 PDT 2018
+   ///home/pan
+   
+   #!/bin/bash //make sure script run in bash
+   
+   
+   //Pass positional parameter ${10}
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   echo first parameter $1
+   echo second parameter $2
+   echo number of parameter $#
+   echo All parameters $@ //"$1" "$2"
+   echo All parameters $* //"$1 $2" */
+   pan@ubuntu:~$ . script1 ant bee
+   /*first parameter ant
+   second parameter bee
+   number of parameter 2
+   All parameters ant bee
+   All parameters ant bee*/
+   
+   //<< END redirect fixed text into a command END: delimiter
+   pan@ubuntu:~$ cat << END > cities
+   /*> Atlanta
+   > Chicago
+   > END*/
+   pan@ubuntu:~$ cat cities 
+   /*Atlanta
+   Chicago*/
+   
+   
+   //Conditional Execution
+   //1. test command
+   test expression
+   -f:file, -d:directory, -r:readable, -w:writable, -x:executable, -s:non-zero length 
+   echo $? //return value
+   //eg
+   pan@ubuntu:~$ test -f script1 
+   pan@ubuntu:~$ echo $?
+   //0 // script1 is a file
+   pan@ubuntu:~$ test -d script1 
+   pan@ubuntu:~$ echo $?
+   //1 // script1 is not a directory
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   test $1 -eq $2
+   echo $?
+   test $1 -le $2
+   echo $?
+   test $3 == $4
+   echo $?
+   test -n $3
+   echo $? */
+   pan@ubuntu:~$ . script1 2 4 'helo' 'hello'
+   /*1
+   0
+   1
+   0*/
+   
+   //2. && ||
+   command1 && command2: if command1 succeed then do command2
+   command1 || command2 : if command2 fail then do command2
+   
+   //3. if then statement
+   if [command return 0]
+   then
+   commands
+   else
+   commands
+   if
+   //eg
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   if [ "$v" -eq 101 ]
+   then
+   echo value is equal to 101
+   else
+   echo value is not equal to 101
+   fi */
+   pan@ubuntu:~$ v=101
+   pan@ubuntu:~$ . script1 
+   //value is equal to 101
+   pan@ubuntu:~$ bash script1 
+   //script1: line 2: [: : integer expression expected
+   //value is not equal to 101
+   pan@ubuntu:~$ ./script1 
+   //./script1: line 2: [: : integer expression expected
+   //value is not equal to 101
+   pan@ubuntu:~$ v=100
+   pan@ubuntu:~$ . script1 
+   //value is not equal to 101
+   
+   
+   //Loop
+   //set of command that is executed over and over
+   //1. while command
+   while [command return 0]
+   do
+   commands
+   done
+   //eg
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   while true
+   do
+   echo "it is now $(date)"
+   echo "There are `ps aux | wc -l` processes"
+   sleep 6
+   done */
+   pan@ubuntu:~$ . script1 
+   /*it is now Wed Jun 20 00:25:38 PDT 2018
+   There are 301 processes
+   it is now Wed Jun 20 00:25:44 PDT 2018
+   There are 301 processes
+   it is now Wed Jun 20 00:25:50 PDT 2018
+   There are 301 processes
+   it is now Wed Jun 20 00:25:56 PDT 2018
+   There are 301 processes
+   it is now Wed Jun 20 00:26:02 PDT 2018
+   There are 301 processes
+   it is now Wed Jun 20 00:26:08 PDT 2018
+   There are 301 processes*/
+   
+   //2. for
+   for identifier in list
+   do
+   commands
+   done
+   //eg
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   for file in ./test*
+   do
+   cat $file
+   sleep 3
+   done*/
+   pan@ubuntu:~$ . script1 
+   /*bird.5
+   dog.1
+   elephant.32
+   monkey.4 
+   penguin.10
+   zebra.23
+   hello world.
+   Hello world.*/
+   
+   //shift argument: deal with large number of parameter
+   pan@ubuntu:~$ cat script1  //Use shift + while
+   /*#!/bin/bash
+   while [ $# -gt 0 ]
+   do
+   echo $1
+   sleep 2
+   shift
+   done*/
+   pan@ubuntu:~$ . script1 1 2 34 5 6 7 7 8
+   /*1
+   2
+   34
+   5
+   6
+   7
+   7
+   8*/
+   pan@ubuntu:~$ cat script1 //Use for
+   /*#!/bin/bash
+   for p in $@
+   do
+   echo $p
+   sleep 2
+   shift
+   done*/
+   pan@ubuntu:~$ . script1 1 2 34 5 6 7 7 8
+   /*1
+   2
+   34
+   5
+   6
+   7
+   7
+   8*/
+   
+   //Uer interaction: read
+   //eg
+   pan@ubuntu:~$ cat script1 
+   /*#!/bin/bash
+   echo please enter the file name:
+   read name
+   if [ -f $name ]
+   then
+   rm $name
+   else
+   echo $name is not a file
+   fi*/
+   pan@ubuntu:~$ . script1 
+   /*please enter the file name:
+   test
+   test is not a file*/
+   pan@ubuntu:~$ . script1 
+   /*please enter the file name:
+   test1*/
+   
+   //let or $(()): arithmetic expression
+   pan@ubuntu:~$ let x=4*4
+   pan@ubuntu:~$ echo $x
+   //16
+   pan@ubuntu:~$ echo $((3 + 4))
+   //7
+   ```
+
+   
