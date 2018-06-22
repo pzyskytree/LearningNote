@@ -7,5 +7,7 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="E:/JavaWeb/servlet-api.jar"/>
+	<classpathentry kind="lib" path="E:/JavaWeb/commons-fileupload-1.2.2.jar"/>
+	<classpathentry kind="lib" path="E:/JavaWeb/commons-io-1.4.jar"/>
 	<classpathentry kind="output" path="web/WEB-INF/classes"/>
 </classpath>

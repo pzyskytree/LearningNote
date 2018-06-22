@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app>
+	<servlet>
+		<servlet-name>HelloServlet</servlet-name>
+		<servlet-class>HelloServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HelloServlet</servlet-name>
+		<url-pattern>/hello</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HeroListServlet</servlet-name>
+		<servlet-class>HeroListServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HeroListServlet</servlet-name>
+		<url-pattern>/listHero</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HeroAddServlet</servlet-name>
+		<servlet-class>HeroAddServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HeroAddServlet</servlet-name>
+		<url-pattern>/addHero</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HeroDeleteServlet</servlet-name>
+		<servlet-class>HeroDeleteServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HeroDeleteServlet</servlet-name>
+		<url-pattern>/deleteHero</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HeroEditServlet</servlet-name>
+		<servlet-class>HeroEditServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HeroEditServlet</servlet-name>
+		<url-pattern>/editHero</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>HeroUpdateServlet</servlet-name>
+		<servlet-class>HeroUpdateServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>HeroUpdateServlet</servlet-name>
+		<url-pattern>/updateHero</url-pattern>
+	</servlet-mapping>
+</web-app>

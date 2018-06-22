@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html charset=UTF-8">
+	<title>Hello</title>
+</head>
+<body>
+	<h1>Big Title</h1>
+	<h2>Small Title</h2>
+	<h3>Smaller Title</h3>
+	<p align="center">Hello World</p>
+	<br>
+	<p>你好世界</p>
+	<!--A Horizontal Line -->
+	paragraph1
+	paragraph2
+	paragraph3
+	<p>paragraph4</p>
+	<p>paragraph5</p>
+	<b>bold(b) label effect</b>
+	<br>
+	<strong>strong label effect</strong>
+	<br>
+	<i>italic(i) label  effect</i>
+	<br>
+	<em>emphasized(em) label effect</em>
+	<br>
+	<em><strong>strong and emphazied at the same time</strong></em>
+	<br>
+	<p>Hello World without pre</p>
+	public class HelloWorld{
+
+		public static void main(String[] args){
+			System.out.println("Hello World");
+		}
+	}
+	<br>
+	<p>Hello World with pre</p>
+	<pre>
+	public class HelloWorld{
+
+		public static void main(String[] args){
+			System.out.println("Hello World");
+		}
+	}	
+	</pre>
+	<br>
+	<del>The effect of delete(del)</del><br>
+	<s>The effect of s</s><br>
+	<ins>The effect of Underline(ins)</ins><br>
+	<u>The effect of Underline(u)</u>
+	<br>
+	<hr>
+	
+	<img width="200" height="200" src="E://JavaWeb//example.gif" alt="This is picture">
+	<img width="200" height="200" src="E://JavaWeb//example1.gif" alt="This is picture">
+	<div align="left">
+		<img src="e://JavaWeb//example.gif">
+	</div>
+	<div align="center">
+		<img src="e://JavaWeb//example.gif">
+	</div>
+	<div align="right"> 
+		<img src="e://JavaWeb//example.gif">
+	</div>
+
+	<a href="http://www.baidu.com">Baidu</a>
+	<a href="http://www.baidu.com" target="_blank">Baidu</a>
+	<a href="http://www.baidu.com" title="jump to baidu" target="_blank">Baidu</a>
+	<a href="http://www.baidu.com" target="_blank" title="Jump to Baidu">
+		<img src="e://JavaWeb//example.gif">
+	</a>
+	<br>
+
+	<table border="1" width="200px">
+		<tr>
+			<td width="50px" align="left">1</td>
+			<td>2</td>
+		</tr>
+		<tr>
+			<td width="50%" align="center">3</td>
+			<td>4</td>
+		</tr>
+		<tr>
+			<td align="right">5</td>
+			<td>6</td>
+		</tr>
+	</table>
+	<br>
+	<table border="1" width="200px">
+		<tr>
+			<td width="50px" valign="top">1</td>
+			<td>
+				2 <br>
+				2 <br>
+				2 <br>
+			</td>
+		</tr>
+		<tr>
+			<td width="50%" valign="middle">3</td>
+			<td>
+				4 <br>
+				4 <br>
+				4 <br>
+			</td>
+		</tr>
+		<tr>
+			<td valign="bottom">5</td>
+			<td>
+				6 <br>
+				6 <br>
+				6 <br>
+			</td>
+		</tr>
+	</table>
+
+	<br>
+	<table border="1" width="200px">
+		<tr>
+			<td width="50px" colspan="2">1, 2</td>
+		</tr>
+		<tr bgcolor="grey">
+			<td width="50%" rowspan="2">3, 5</td>
+			<td>4</td>
+		</tr>
+		<tr>
+			<td bgcolor="pink">6</td>
+		</tr>
+	</table>
+
+	<ul>
+		<li>
+			DOTA
+		</li>
+		<li>
+			LOL
+		</li>
+	</ul>
+
+	<ol>
+		<li>
+			DOTA
+		</li>
+		<li>
+			LOL
+		</li>
+	</ol>
+
+	<div>This is a div1</div>
+	<div>This is a div2</div>
+	<span>This is a span1</span>
+	<span>This is a span2</span><br>
+	<img style="margin-left:50px" src="E://JavaWeb//example.gif">
+	<br>
+	<img style="margin-left:50px" src="E://JavaWeb//example.gif">
+	<div style="margin-left:50px">
+		<img src="E://JavaWeb//example.gif"><br>
+		<img src="E://JavaWeb//example.gif">
+	</div>
+
+	<font color="green" >Green with default size</font>
+	<font color="red" size="+2">Red with plus 2 size</font>
+	<iframe src="http://how2j.cn" width="600px" height="400px"></iframe>
+	<hr>
+
+
+	<input type="text" size="10px" value="Initial Value">
+	<br>
+	<input type="text" name="account" placeholder="Please Input Account"><br>
+	<input type="password" name="" placeholder="password">
+
+	<form action="http://how2j.cn/study/login.jsp" method="post">
+		Account: <input type="text" name="account"><br>
+		Password: <input type="password" name="password"><br>
+		<input type="submit" value="Login">
+	</form>
+
+	<p>What did you do tonight</p>
+	Study Java <input type="radio" name="activity" checked="checked" value="java"><br>
+	dota <input type="radio" name="activity" value="dota"><br>
+	LOL <input type="radio" name="activity" value="lol">
+
+	<p>What did you do tonight</p>
+	Study Java <input type="checkbox" name="activity" checked="checked" value="java"><br>
+	dota <input type="checkbox" name="activity" value="dota"><br>
+	LOL <input type="checkbox" name="activity" value="lol">
+	<br>
+	<select size="2" multiple="multiple">
+		<option selected="selected">Java</option>
+		<option>C</option>
+		<option>JavaScript</option>
+		<option>HTML</option>
+	</select>
+	<br>
+	<textarea>hello
+		world
+	</textarea>
+	<textarea cols="30" rows="8">123456789012345678901234567890
+	1234567890
+	1234567890
+	1234567890
+	1234567890
+	1234567890
+	1234567890
+	1234567890</textarea>
+	<br>
+
+	<form action="http://how2j.cn/study/login.jsp" method="post">
+		Account: <input type="text" name="account"><br>
+		Password: <input type="password" name="password"><br>
+		<input type="button" value="Button">
+		<input type="submit" name="Submit">
+		<input type="reset" name="Reset">
+		<input type="image" src="e://JavaWeb//example.gif">
+		<button type="submit">Submit Button</button>
+	</form>
+
+	<button>Button</button>
+	<button><img src="e://JavaWeb//example.gif"></button>
+	<hr>
+
+</body>
+</html>
